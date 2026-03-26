@@ -1,311 +1,546 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taylan Şengül – Homepage</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5RM2NXW48"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-Z5RM2NXW48');
-    </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taylan Şengül – Homepage</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5RM2NXW48"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z5RM2NXW48');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: system-ui, -apple-system, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #fafafa;
-            color: #333;
-            line-height: 1.6;
-        }
+  <style>
+    :root {
+      --ink:      #1a1a1a;
+      --muted:    #6b6b6b;
+      --rule:     #d8d0c4;
+      --accent:   #8b3a1e;
+      --bg:       #f5f1eb;
+      --card:     #faf8f5;
+      --serif:    'EB Garamond', Georgia, serif;
+      --mono:     'DM Mono', 'Courier New', monospace;
+    }
 
-        header {
-            background: #ffffff;
-            border-bottom: 1px solid #ddd;
-            padding: 1rem 1.5rem;
-            position: sticky;
-            top: 0;
-        }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.4rem;
-        }
+    html { scroll-behavior: smooth; }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 1.5rem;
-        }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
 
-        img.profile {
-            border-radius: 6px;
-            height: 180px;
-        }
+    /* ── Nav ─────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 2rem;
+      gap: 1rem;
+    }
 
-        h4 {
-            margin-top: 2rem;
-            font-size: 1.2rem;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 4px;
-        }
+    .nav-name {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--accent);
+      white-space: nowrap;
+    }
 
-        a {
-            color: #0066cc;
-            text-decoration: none;
-        }
+    .nav-links {
+      display: flex;
+      gap: 1.4rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
 
-        ul {
-            margin-top: .3rem;
-            padding-left: 1.2rem;
-        }
+    .nav-links a:hover { color: var(--accent); }
 
-        li {
-            margin-bottom: .3rem;
-        }
-    </style>
+    /* ── Layout ──────────────────────────────────── */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── Hero ────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+      margin-bottom: 3.5rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .hero img {
+      width: 160px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 3px;
+      filter: sepia(8%) contrast(1.05);
+    }
+
+    .hero-body h1 {
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+    }
+
+    .hero-body .position {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero-bio {
+      font-size: 1rem;
+      color: #3a3a3a;
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .hero-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      padding: 0.25em 0.7em;
+      border-radius: 2px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .hero-links a:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── Section headings ────────────────────────── */
+    section { margin-bottom: 3rem; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ── Course grid ─────────────────────────────── */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .course-card {
+      background: var(--card);
+      padding: 1.25rem 1.4rem;
+      transition: background 0.15s;
+    }
+
+    .course-card:hover { background: #fff; }
+
+    .course-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+    }
+
+    .course-card .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.4rem;
+    }
+
+    .link-tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-decoration: none;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      padding: 0.15em 0.55em;
+      border-radius: 2px;
+      transition: color 0.12s, border-color 0.12s;
+    }
+
+    .link-tag:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .link-row-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    /* ── Misc list ───────────────────────────────── */
+    .misc-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .misc-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.98rem;
+    }
+
+    .misc-list li:last-child { border-bottom: none; }
+
+    .misc-list a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .misc-list a:hover { text-decoration: underline; }
+
+    /* ── Concert sub-list ────────────────────────── */
+    .concert-list {
+      margin-top: 0.5rem;
+      padding-left: 1rem;
+      list-style: none;
+      border-left: 2px solid var(--rule);
+    }
+
+    .concert-list li { padding: 0.25rem 0; font-size: 0.92rem; }
+
+    /* ── Responsive ──────────────────────────────── */
+    @media (max-width: 580px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero img { width: 120px; height: 150px; }
+      nav { padding: 0.65rem 1rem; }
+      .nav-links { gap: 0.8rem; }
+    }
+  </style>
 </head>
-
 <body>
 
-    <header>
+  <nav>
+    <span class="nav-name">Taylan Şengül</span>
+    <ul class="nav-links">
+      <li><a href="#courses">Dersler</a></li>
+      <li><a href="#misc">Diğer</a></li>
+      <li><a href="files/CV.pdf">CV</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+
+    <!-- ── Hero ── -->
+    <div class="hero">
+      <img src="files/foto.jpeg" alt="Taylan Şengül">
+      <div class="hero-body">
         <h1>Prof. Dr. Taylan Şengül</h1>
-    </header>
-
-    <div class="container">
-
-        <p>
-            <img src="files/foto.jpeg" alt="Taylan Sengul" class="profile"><br>
+        <p class="position">Uygulamalı Matematik · Marmara Üniversitesi</p>
+        <p class="hero-bio">
+          Araştırma ilgi alanlarım uygulamalı matematik, dinamik sistemler ve kısmi türevli denklemler üzerinedir.
+          Özellikle doğrusal olmayan sistemlerde dinamik geçişler ve geometrik kararlılık analizleriyle ilgilenmekteyim.
         </p>
-
-        <ul>
-            <li>Marmara Üniversitesi Fen Fakültesi Matematik Bölümü Uygulamalı Matematik Anabilim Dalı
-            </li>
-            <li><a href="files/CV.pdf">CV</a></li>
-            <li><a href="https://www.researchgate.net/profile/Taylan_Sengul">ResearchGate</a></li>
-            <li><a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&hl=tr">Google Scholar</a></li>
-            <li><a href="https://www.youtube.com/@taylan_sengul">Youtube</a></li>
-            <li><a href="https://x.com/tayl_seng">X (Twitter)</a></li>
-        </ul>
-        <!-- <p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf9xVCGbM857TJ3Qrle5rc389ygPfxEbNU7fDgai3Lugxkl2Q/viewform?usp=dialog"
-                target="_blank"
-                style="display: inline-block; padding: 0.5em 1em; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px;">
-                Ders Geri Bildirim Formu
-            </a>
-        </p> -->
-
-
-        <!-- Dynamical Systems -->
-        <h4>Dinamik Sistemler</h4>
-        <ul>
-            <li><a href="files/strogatz.pdf">Ders Notları (İngilizce)</a></li>
-            <li>Arasınav:
-                <a href="files/ds 25 arasinav.pdf">2025</a>,
-                <a href="files/ds 24 arasinav.pdf">2024</a>,
-                <a href="files/ds 23 arasinav.pdf">2023</a>.
-            </li>
-            <li>Final:
-                <a href="files/ds 25 final.pdf">2025</a>,
-                <a href="files/ds 24 final.pdf">2024</a>,
-                <a href="files/ds 23 final.pdf">2023</a>.
-            </li>
-        </ul>
-
-        <!-- Bilim Tarihi -->
-        <h4>Bilim Tarihi</h4>
-        <ul>
-            <li>2025: <a href="files/guz_2025_bilim_tarihi_sunum.html">Bilim Tarihi Öğrenci Sunumları Özetleri</a></li>
-            <li>2025: <a href="files/bilim_tarihi_2025_I.html">Ders 1–6 notları</a></li>
-            <li>2023:
-                <a href="files/bilim_tarihi_2023.html">Rönesans Öncesi Bilim Tarihi</a>,
-                <a href="files/bilimtarihi 23 arasinav.pdf">Arasınav</a>,
-                <a href="files/bilimtarihi 23 final.pdf">Final</a>,
-            </li>
-            <li>2022:
-                Rönesans Sonrası Bilim Tarihi
-                <a href="files/bilimtarihinotlari.pdf">(pdf)</a>,
-                <a href="files/bilimtarihinotlari.html">(html)</a>,
-                <a href="files/bilimtarihi 22 arasinav.pdf">Arasınav</a>,
-                <a href="files/bilimtarihi 22 final.pdf">Final</a>.
-            </li>
-        </ul>
-
-        <!-- KTD -->
-        <h4>Kısmi Türevli Denklemler</h4>
-        <ul>
-            <li>Arasınav:
-                <a href="files/ktd 25 arasinav.pdf">2025</a>,
-                <a href="files/ktd 24 arasinav.pdf">2024</a>,
-                <a href="files/ktd 23 arasinav.pdf">2023</a>,
-                <a href="files/ktd 22 arasinav.pdf">2022</a>,
-                <a href="files/ktd 21 arasinav.pdf">2021</a>,
-            </li>
-            <li>Final:
-                <a href="files/ktd 25 final.pdf">2025</a>,
-                <a href="files/ktd 24 final.pdf">2024</a>,
-                <a href="files/ktd 23 final.pdf">2023</a>,
-                <a href="files/ktd 22 final.pdf">2022</a>,
-                <a href="files/ktd 21 final.pdf">2021</a>.
-            </li>
-        </ul>
-
-        <!-- Analiz 3 -->
-        <h4>Analiz 3</h4>
-        <ul>
-            <li><a href="files/analiz3main.pdf">Ders Notları</a></li>
-            <li>Arasınav:
-                <a href="files/analiz3 21 arasinav.pdf">2021</a>,
-                <a href="files/analiz3 19 arasinav.pdf">2019</a>,
-                <a href="files/analiz3 18 arasinav.pdf">2018</a>,
-                <a href="files/analiz3 17 arasinav.pdf">2017</a>,
-                <a href="files/analiz3 16 arasinav.pdf">2016</a>.
-            </li>
-            <li>Final:
-                <a href="files/analiz3 21 final.pdf">2021</a>,
-                <a href="files/analiz3 20 final.pdf">2020</a>,
-                <a href="files/analiz3 19 final.pdf">2019</a>,
-                <a href="files/analiz3 18 final.pdf">2018</a>,
-                <a href="files/analiz3 17 final.pdf">2017</a>,
-                <a href="files/analiz3 16 final.pdf">2016</a>.
-            </li>
-        </ul>
-
-        <!-- Analiz 4 -->
-        <h4>Analiz 4</h4>
-        <ul>
-            <li><a href="files/analiz4main.pdf">Ders Notları</a></li>
-            <li>Arasınav:
-                <a href="files/analiz4 22 arasinav.pdf">2022</a>,
-                <a href="files/analiz4 19 arasinav.pdf">2019</a>,
-                <a href="files/analiz4 18 arasinav.pdf">2018</a>,
-                <a href="files/analiz4 17 arasinav.pdf">2017</a>.
-            </li>
-            <li>Final:
-                <a href="files/analiz4 22 final.pdf">2022</a>,
-                <a href="files/analiz4 19 final.pdf">2019</a>,
-                <a href="files/analiz4 18 final.pdf">2018</a>,
-                <a href="files/analiz4 17 final.pdf">2017</a>.
-            </li>
-            <li>Videolar:
-                Hafta 5:
-                <a href="https://www.youtube.com/watch?v=u4wdUrLFiR0">video</a>,
-                <a href="files/analiz4hafta5.pdf">slaytlar</a>,
-                Hafta 6:
-                <a href="https://www.youtube.com/watch?v=Q0NK92Cpspo">video</a>,
-                <a href="files/analiz4hafta6.pdf">slaytlar</a>
-            </li>
-        </ul>
-
-        <h4>Calculus I</h4>
-        <ul>
-            <li><a href="files/calc1-main.pdf">Lecture Notes</a></li>
-            <li>Exam 1:
-                <a href="files/calc1 19 exam1.pdf">2019</a>,
-                <a href="files/calc1 17 exam1.pdf">2017</a>,
-                <a href="files/calc1 16 exam1.pdf">2016</a>,
-                <a href="files/calc1 15 exam1.pdf">2015</a>,
-            </li>
-            <li>Exam 2:
-                <a href="files/calc1 19 exam2.pdf">2019</a>,
-                <a href="files/calc1 17 exam2.pdf">2017</a>,
-                <a href="files/calc1 16 exam2.pdf">2016</a>,
-            </li>
-            <li>Final:
-                <a href="files/calc1 19 final.pdf">2019</a>,
-                <a href="files/calc1 17 final.pdf">2017</a>,
-                <a href="files/calc1 16 final.pdf">2016</a>,
-                <a href="files/calc1 15 final.pdf">2015</a>,
-            </li>
-            <li><a href="files/thomas.pdf">Course Plan and Exercises</a></li>
-            <li><a href="https://github.com/taylansengul/calc1">LaTeX source files</a></li>
-            <li><a href="https://www.dropbox.com/s/f9w7z3lsl0ns5g1/2020calc1-week1to8.pdf?dl=0">2020 Fall: in class lecture notes</a></li>
-        </ul>
-
-        <h4>Calculus II</h4>
-        <ul>
-            <li>Lecture notes. Week:
-                <a href="files/calc2 week 1.pdf">1</a>,
-                <a href="files/calc2 week 2.pdf">2</a>,
-                <a href="files/calc2 week 3.pdf">3</a>,
-                <a href="files/calc2 week 4.pdf">4</a>,
-                <a href="files/calc2 week 5.pdf">5</a>,
-                <a href="files/calc2 week 6.pdf">6</a>,
-                <a href="files/calc2 week 7.pdf">7</a>,
-                <a href="files/calc2 week 8.pdf">8</a>,
-                <a href="files/calc2 week 9.pdf">9</a>,
-                <a href="files/calc2 week 10.pdf">10</a>,
-                <a href="files/calc2 week 11.pdf">11</a>,
-                <a href="files/calc2 week 12.pdf">12</a>,
-                <a href="files/calc2 week 13.pdf">13</a>,
-                <a href="files/calc2 week 14.pdf">14</a>.
-            </li>
-            <li>Exams:
-                <a href="files/calc2 17 exam1.pdf">2017S1</a>,
-                <a href="files/calc2 17 exam2.pdf">2017S2</a>,
-                <a href="files/calc2 17 final.pdf">2017S3</a>,
-                <a href="files/calc2 18 exam1.pdf">2018S1</a>
-                <a href="files/calc2 18 exam2.pdf">2018S2</a>
-                <a href="files/calc2 18 final.pdf">2018S3</a>,
-            </li>
-        </ul>
-
-        <!-- Differential Equations -->
-        <h4>Differential Equations</h4>
-        <ul>
-            <li>2018:
-                <a href="files/diffequ 18 exam1.pdf">Exam I</a>,
-                <a href="files/diffequ 18 exam2.pdf">Exam II</a>,
-                <a href="files/diffequ 18 final.pdf">Final</a>,
-            </li>
-        </ul>
-
-        <!-- Linear Algebra -->
-        <h4>Linear Algebra</h4>
-        <ul>
-            <li><a href="files/linalgmain.pdf">Lecture Notes</a></li>
-            <li>
-                <a href="https://www.youtube.com/playlist?list=PLx0fNgtlR8dIa7NaJD7eNj5pkm_NfCFvy">Spring 2020 video
-                    lectures</a>, <a href="files/linalg 20 sp videopdf.pdf">Video lectures pdf</a>.
-            </li>
-            <li>Past Exams:
-                2020 Spring: <a href="files/linalg 20 exam1.pdf">Midterm</a>, <a href="files/linalg 20 final.pdf">Final</a>.
-                2019 Spring: <a href="files/linalg 19 exam1.pdf">Exam I</a>, <a href="files/linalg 19 exam2.pdf">Exam
-                    II</a>, <a href="files/linalg 19 final.pdf">Final</a>.
-            </li>
-        </ul>
-
-
-        <!-- Misc -->
-        <h4>Misc</h4>
-        <ul>
-            <li><a href="files/ankii.pdf">Random questions and answers</a></li>
-            <li>Numpy: <a href="files/numpy1.html">Ders 1</a>, <a href="files/numpy2.html">Ders 2</a></li>
-        <li><a href="https://bilimvegelecek.com.tr/index.php/2019/03/01/evrimi-anlamak-icin-bir-hos-zaman-kitabi-darwin/">Darwin
-                -Herkes İçin Evrim</a> kitabına dair tanıtım yazım (2019).</li>
-        <li><a href="https://bilimvegelecek.com.tr/index.php/2018/04/01/maddenin-gizemleri/">Maddenin Gizemleri</a> kitabına dair tanıtım yazım (2018).</li>
-        <li>2007'de Müzik Fiziği üzerine yazdığım <a href="https://www.art-izan.org/artizan-arsivi/muzik-fizigi/">yazım.</a></li>
-        <li>
-            1 Aralık 2000'de Boğaziçi Üniversitesi Albert Long Hall'da Çağatay Çoker ve Tolgahan Çoğulu ile beraber verdiğimiz Üç Gitarlık Dinleti konserimizin videoları:
-            <ul>
-            <li><a href="https://www.youtube.com/watch?v=1Qj474rZxHo">Erkan Oğur-Ağırlama</a></li>
-            <li><a href="https://www.youtube.com/watch?v=emPpX8uhVi4">Beste-War</a></li>
-            <li><a href="https://www.youtube.com/watch?v=2oj-mIfWOgM">Julio Sagreras-El Colibri</a></li>
-            <li><a href="https://www.youtube.com/watch?v=v0NWQr4zwpQ">Beste-Adelita'nın Rüyası</a></li>
-            <li><a href="https://www.youtube.com/watch?v=v3E8azJpvuM">Goran Bregovic - Talijanska / Anonim (Django Reinhardt versiyonu) - Dark Eyes</a></li>
-            <li><a href="https://www.youtube.com/watch?v=pO6qt-tmS_8">Inti Illimani - Kalimba</a></li>
-            </ul>
-        </li>
+        <div class="hero-links">
+          <a href="files/CV.pdf">CV</a>
+          <a href="https://www.researchgate.net/profile/Taylan_Sengul" target="_blank">ResearchGate</a>
+          <a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&hl=tr" target="_blank">Google Scholar</a>
+          <a href="https://www.youtube.com/@taylan_sengul" target="_blank">YouTube</a>
+          <a href="https://x.com/tayl_seng" target="_blank">X / Twitter</a>
+        </div>
+      </div>
     </div>
 
-</body>
+    <!-- ── Courses ── -->
+    <section id="courses">
+      <div class="section-label">Dersler</div>
 
+      <div class="course-grid">
+
+        <!-- Dinamik Sistemler -->
+        <div class="course-card">
+          <h3>Dinamik Sistemler</h3>
+          <a class="link-tag" href="files/strogatz.pdf">Ders Notları (EN)</a>
+          <span class="link-row-label">Arasınav</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/ds 25 arasinav.pdf">2025</a>
+            <a class="link-tag" href="files/ds 24 arasinav.pdf">2024</a>
+            <a class="link-tag" href="files/ds 23 arasinav.pdf">2023</a>
+          </div>
+          <span class="link-row-label">Final</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/ds 25 final.pdf">2025</a>
+            <a class="link-tag" href="files/ds 24 final.pdf">2024</a>
+            <a class="link-tag" href="files/ds 23 final.pdf">2023</a>
+          </div>
+        </div>
+
+        <!-- Bilim Tarihi -->
+        <div class="course-card">
+          <h3>Bilim Tarihi</h3>
+          <span class="link-row-label">2025</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/guz_2025_bilim_tarihi_sunum.html">Sunumlar</a>
+            <a class="link-tag" href="files/bilim_tarihi_2025_I.html">Ders 1–6</a>
+          </div>
+          <span class="link-row-label">2023</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/bilim_tarihi_2023.html">Notlar</a>
+            <a class="link-tag" href="files/bilimtarihi 23 arasinav.pdf">Arasınav</a>
+            <a class="link-tag" href="files/bilimtarihi 23 final.pdf">Final</a>
+          </div>
+          <span class="link-row-label">2022</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/bilimtarihinotlari.pdf">Notlar (pdf)</a>
+            <a class="link-tag" href="files/bilimtarihinotlari.html">Notlar (html)</a>
+            <a class="link-tag" href="files/bilimtarihi 22 arasinav.pdf">Arasınav</a>
+            <a class="link-tag" href="files/bilimtarihi 22 final.pdf">Final</a>
+          </div>
+        </div>
+
+        <!-- KTD -->
+        <div class="course-card">
+          <h3>Kısmi Türevli Denklemler</h3>
+          <span class="link-row-label">Arasınav</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/ktd 25 arasinav.pdf">2025</a>
+            <a class="link-tag" href="files/ktd 24 arasinav.pdf">2024</a>
+            <a class="link-tag" href="files/ktd 23 arasinav.pdf">2023</a>
+            <a class="link-tag" href="files/ktd 22 arasinav.pdf">2022</a>
+            <a class="link-tag" href="files/ktd 21 arasinav.pdf">2021</a>
+          </div>
+          <span class="link-row-label">Final</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/ktd 25 final.pdf">2025</a>
+            <a class="link-tag" href="files/ktd 24 final.pdf">2024</a>
+            <a class="link-tag" href="files/ktd 23 final.pdf">2023</a>
+            <a class="link-tag" href="files/ktd 22 final.pdf">2022</a>
+            <a class="link-tag" href="files/ktd 21 final.pdf">2021</a>
+          </div>
+        </div>
+
+        <!-- Analiz 3 -->
+        <div class="course-card">
+          <h3>Analiz 3</h3>
+          <a class="link-tag" href="files/analiz3main.pdf">Ders Notları</a>
+          <span class="link-row-label">Arasınav</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/analiz3 21 arasinav.pdf">2021</a>
+            <a class="link-tag" href="files/analiz3 19 arasinav.pdf">2019</a>
+            <a class="link-tag" href="files/analiz3 18 arasinav.pdf">2018</a>
+            <a class="link-tag" href="files/analiz3 17 arasinav.pdf">2017</a>
+            <a class="link-tag" href="files/analiz3 16 arasinav.pdf">2016</a>
+          </div>
+          <span class="link-row-label">Final</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/analiz3 21 final.pdf">2021</a>
+            <a class="link-tag" href="files/analiz3 20 final.pdf">2020</a>
+            <a class="link-tag" href="files/analiz3 19 final.pdf">2019</a>
+            <a class="link-tag" href="files/analiz3 18 final.pdf">2018</a>
+            <a class="link-tag" href="files/analiz3 17 final.pdf">2017</a>
+            <a class="link-tag" href="files/analiz3 16 final.pdf">2016</a>
+          </div>
+        </div>
+
+        <!-- Analiz 4 -->
+        <div class="course-card">
+          <h3>Analiz 4</h3>
+          <a class="link-tag" href="files/analiz4main.pdf">Ders Notları</a>
+          <span class="link-row-label">Arasınav</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/analiz4 22 arasinav.pdf">2022</a>
+            <a class="link-tag" href="files/analiz4 19 arasinav.pdf">2019</a>
+            <a class="link-tag" href="files/analiz4 18 arasinav.pdf">2018</a>
+            <a class="link-tag" href="files/analiz4 17 arasinav.pdf">2017</a>
+          </div>
+          <span class="link-row-label">Final</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/analiz4 22 final.pdf">2022</a>
+            <a class="link-tag" href="files/analiz4 19 final.pdf">2019</a>
+            <a class="link-tag" href="files/analiz4 18 final.pdf">2018</a>
+            <a class="link-tag" href="files/analiz4 17 final.pdf">2017</a>
+          </div>
+          <span class="link-row-label">Videolar</span>
+          <div class="link-row">
+            <a class="link-tag" href="https://www.youtube.com/watch?v=u4wdUrLFiR0">Hafta 5 video</a>
+            <a class="link-tag" href="files/analiz4hafta5.pdf">Hafta 5 slayt</a>
+            <a class="link-tag" href="https://www.youtube.com/watch?v=Q0NK92Cpspo">Hafta 6 video</a>
+            <a class="link-tag" href="files/analiz4hafta6.pdf">Hafta 6 slayt</a>
+          </div>
+        </div>
+
+        <!-- Calculus I -->
+        <div class="course-card">
+          <h3>Calculus I</h3>
+          <div class="link-row">
+            <a class="link-tag" href="files/calc1-main.pdf">Lecture Notes</a>
+            <a class="link-tag" href="files/thomas.pdf">Course Plan</a>
+            <a class="link-tag" href="https://github.com/taylansengul/calc1">LaTeX source</a>
+            <a class="link-tag" href="https://www.dropbox.com/s/f9w7z3lsl0ns5g1/2020calc1-week1to8.pdf?dl=0">2020 Fall Notes</a>
+          </div>
+          <span class="link-row-label">Exam 1</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/calc1 19 exam1.pdf">2019</a>
+            <a class="link-tag" href="files/calc1 17 exam1.pdf">2017</a>
+            <a class="link-tag" href="files/calc1 16 exam1.pdf">2016</a>
+            <a class="link-tag" href="files/calc1 15 exam1.pdf">2015</a>
+          </div>
+          <span class="link-row-label">Exam 2</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/calc1 19 exam2.pdf">2019</a>
+            <a class="link-tag" href="files/calc1 17 exam2.pdf">2017</a>
+            <a class="link-tag" href="files/calc1 16 exam2.pdf">2016</a>
+          </div>
+          <span class="link-row-label">Final</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/calc1 19 final.pdf">2019</a>
+            <a class="link-tag" href="files/calc1 17 final.pdf">2017</a>
+            <a class="link-tag" href="files/calc1 16 final.pdf">2016</a>
+            <a class="link-tag" href="files/calc1 15 final.pdf">2015</a>
+          </div>
+        </div>
+
+        <!-- Calculus II -->
+        <div class="course-card">
+          <h3>Calculus II</h3>
+          <span class="link-row-label">Lecture Notes</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/calc2 week 1.pdf">W1</a>
+            <a class="link-tag" href="files/calc2 week 2.pdf">W2</a>
+            <a class="link-tag" href="files/calc2 week 3.pdf">W3</a>
+            <a class="link-tag" href="files/calc2 week 4.pdf">W4</a>
+            <a class="link-tag" href="files/calc2 week 5.pdf">W5</a>
+            <a class="link-tag" href="files/calc2 week 6.pdf">W6</a>
+            <a class="link-tag" href="files/calc2 week 7.pdf">W7</a>
+            <a class="link-tag" href="files/calc2 week 8.pdf">W8</a>
+            <a class="link-tag" href="files/calc2 week 9.pdf">W9</a>
+            <a class="link-tag" href="files/calc2 week 10.pdf">W10</a>
+            <a class="link-tag" href="files/calc2 week 11.pdf">W11</a>
+            <a class="link-tag" href="files/calc2 week 12.pdf">W12</a>
+            <a class="link-tag" href="files/calc2 week 13.pdf">W13</a>
+            <a class="link-tag" href="files/calc2 week 14.pdf">W14</a>
+          </div>
+          <span class="link-row-label">Exams</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/calc2 17 exam1.pdf">2017 S1</a>
+            <a class="link-tag" href="files/calc2 17 exam2.pdf">2017 S2</a>
+            <a class="link-tag" href="files/calc2 17 final.pdf">2017 S3</a>
+            <a class="link-tag" href="files/calc2 18 exam1.pdf">2018 S1</a>
+            <a class="link-tag" href="files/calc2 18 exam2.pdf">2018 S2</a>
+            <a class="link-tag" href="files/calc2 18 final.pdf">2018 S3</a>
+          </div>
+        </div>
+
+        <!-- Differential Equations -->
+        <div class="course-card">
+          <h3>Differential Equations</h3>
+          <span class="link-row-label">2018</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/diffequ 18 exam1.pdf">Exam I</a>
+            <a class="link-tag" href="files/diffequ 18 exam2.pdf">Exam II</a>
+            <a class="link-tag" href="files/diffequ 18 final.pdf">Final</a>
+          </div>
+        </div>
+
+        <!-- Linear Algebra -->
+        <div class="course-card">
+          <h3>Linear Algebra</h3>
+          <div class="link-row">
+            <a class="link-tag" href="files/linalgmain.pdf">Lecture Notes</a>
+            <a class="link-tag" href="https://www.youtube.com/playlist?list=PLx0fNgtlR8dIa7NaJD7eNj5pkm_NfCFvy">2020 Videos</a>
+            <a class="link-tag" href="files/linalg 20 sp videopdf.pdf">Video PDF</a>
+          </div>
+          <span class="link-row-label">2020 Spring</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/linalg 20 exam1.pdf">Midterm</a>
+            <a class="link-tag" href="files/linalg 20 final.pdf">Final</a>
+          </div>
+          <span class="link-row-label">2019 Spring</span>
+          <div class="link-row">
+            <a class="link-tag" href="files/linalg 19 exam1.pdf">Exam I</a>
+            <a class="link-tag" href="files/linalg 19 exam2.pdf">Exam II</a>
+            <a class="link-tag" href="files/linalg 19 final.pdf">Final</a>
+          </div>
+        </div>
+
+      </div><!-- /course-grid -->
+    </section>
+
+    <!-- ── Misc ── -->
+    <section id="misc">
+      <div class="section-label">Diğer</div>
+      <ul class="misc-list">
+        <li><a href="files/ankii.pdf">Random questions and answers</a></li>
+        <li>NumPy: <a href="files/numpy1.html">Ders 1</a>, <a href="files/numpy2.html">Ders 2</a></li>
+        <li>
+          <a href="https://bilimvegelecek.com.tr/index.php/2019/03/01/evrimi-anlamak-icin-bir-hos-zaman-kitabi-darwin/">Darwin – Herkes İçin Evrim</a> — kitap tanıtım yazısı (2019)
+        </li>
+        <li>
+          <a href="https://bilimvegelecek.com.tr/index.php/2018/04/01/maddenin-gizemleri/">Maddenin Gizemleri</a> — kitap tanıtım yazısı (2018)
+        </li>
+        <li>
+          <a href="https://www.art-izan.org/artizan-arsivi/muzik-fizigi/">Müzik Fiziği</a> üzerine yazı (2007)
+        </li>
+      </ul>
+    </section>
+
+  </div><!-- /container -->
+
+</body>
 </html>
