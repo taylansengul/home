@@ -14,301 +14,225 @@
     gtag('config', 'G-Z5RM2NXW48');
   </script>
 
-  <!-- Primary SEO: put the exact high-intent phrases *verbatim* -->
-  <title>Statistik II (WTG, LMU) – English / Turkish Tutoring | Probability Theory Foundations</title>
-  <meta name="description" content="Statistik II (WTG, LMU): Wahrscheinlichkeitstheoretische Grundlagen der Statistik. Tutoring in English or Turkish focused on measure-theoretic probability, distributions, convergence, and exam preparation." />
-  <meta name="keywords" content="Statistik II LMU, Ludwig-Maximilians-Universität München, Statistik 2 WTG LMU, Wahrscheinlichkeitstheoretische Grundlagen der Statistik, Volker Schmid Statistik II, Statistik II LMU English tutor, probability theory tutoring LMU, measure-theoretic probability tutor Munich, convergence of random variables, expectation Lebesgue integral, exam preparation Statistik II English, Turkish tutoring Statistik II, istatistik 2 LMU, istatistik II özel ders, olasılık teorisi özel ders, ölçü kuramı olasılık, rassal değişkenler, dağılım fonksiyonu, beklenen değer, Lebesgue integrali, yakınsama türleri, büyük sayılar kanunu, merkezi limit teoremi, matematik özel ders, analiz özel ders" />
+  <title>Statistik II (WTG, LMU) – Supplementary Notes | Taylan Şengül</title>
+  <meta name="description" content="Supplementary lecture notes and worked problem sets for Statistik II (WTG, LMU): measure-theoretic probability, distributions, convergence of random variables, multidimensional random variables." />
   <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="./lmustatistik.html" />
 
-  <!-- Open Graph (nice previews when shared) -->
-  <meta property="og:title" content="Statistik II (LMU) – English / Turkish Tutoring" />
-  <meta property="og:description"
-    content="Measure-theoretic probability, proofs, exercise sheets, exam preparation for Statistik II (LMU, Schmid). Tutoring in English or Turkish." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="./lmustatistik.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      color-scheme: light dark;
+      --ink:      #1a1a1a;
+      --muted:    #6b6b6b;
+      --rule:     #d8d0c4;
+      --accent:   #8b3a1e;
+      --bg:       #f5f1eb;
+      --card:     #faf8f5;
+      --serif:    'EB Garamond', Georgia, serif;
+      --mono:     'DM Mono', 'Courier New', monospace;
     }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      line-height: 1.55;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      line-height: 1.7;
     }
 
-    .wrap {
-      max-width: 920px;
+    .container {
+      max-width: 860px;
       margin: 0 auto;
-      padding: 28px 18px 60px;
+      padding: 3rem 1.5rem 5rem;
     }
 
     header {
-      padding: 18px 0 10px;
-      border-bottom: 1px solid rgba(127, 127, 127, .25);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.75rem;
+      border-bottom: 1px solid var(--rule);
     }
 
+    header .back {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    header .back:hover { color: var(--accent); }
+
     h1 {
-      margin: 0 0 8px;
-      font-size: 1.65rem;
+      font-size: 1.85rem;
+      font-weight: 500;
+      line-height: 1.25;
+      margin: 0.75rem 0 0.4rem;
+      color: var(--ink);
     }
 
     .sub {
-      margin: 0 0 10px;
-      opacity: .85;
+      font-size: 1rem;
+      color: #3a3a3a;
+      margin-bottom: 0.5rem;
     }
 
-    .pillrow {
+    .position {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    section { margin-bottom: 2.75rem; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 12px 0 0;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    .pill {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(127, 127, 127, .35);
-      font-size: .9rem;
-    }
-
-    section {
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(127, 127, 127, .18);
-    }
-
-    h2 {
-      margin: 0 0 10px;
-      font-size: 1.2rem;
-    }
-
-    ul {
-      margin: 10px 0 0 18px;
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
     }
 
     .grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      overflow: hidden;
     }
 
-    @media (min-width: 880px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
+    @media (min-width: 720px) {
+      .grid { grid-template-columns: 1fr 1fr; }
     }
 
     .card {
-      padding: 14px 14px;
-      border: 1px solid rgba(127, 127, 127, .25);
-      border-radius: 14px;
+      background: var(--card);
+      padding: 1.25rem 1.4rem;
     }
 
-    .muted {
-      opacity: .8;
+    .card p.label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
     }
 
-    details {
-      border: 1px solid rgba(127, 127, 127, .25);
-      border-radius: 14px;
-      padding: 10px 12px;
+    .card ul {
+      list-style: none;
+      padding: 0;
     }
 
-    details+details {
-      margin-top: 10px;
+    .card li {
+      padding: 0.3rem 0;
+      font-size: 0.96rem;
     }
 
-    summary {
-      cursor: pointer;
-      font-weight: 650;
+    .muted { color: var(--muted); }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
     }
 
-    code,
-    pre {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
-
-    pre {
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(127, 127, 127, .25);
-      overflow-x: auto;
-    }
-
-    a {
-      text-underline-offset: 3px;
-    }
-
-    .cta {
-      display: inline-block;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(127, 127, 127, .35);
+    .link-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
       text-decoration: none;
+      border: 1px solid var(--accent);
+      padding: 0.3em 0.75em;
+      border-radius: 2px;
+      transition: background 0.15s, color 0.15s;
     }
 
-    .kws {
-      font-size: .92rem;
+    .link-tag:hover {
+      background: var(--accent);
+      color: #fff;
     }
-    .kws.muted {
-  color: #888;
-  font-style: italic;
-}
 
     footer {
-      padding-top: 18px;
+      margin-top: 3rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--rule);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
     }
-  </style>
 
-  <!-- Optional: Structured data (helps discoverability/credibility) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Service",
-    "name":"Statistik II (WTG, LMU) – English / Turkish Tutoring",
-    "serviceType":"Tutoring",
-    "areaServed":["Munich","Online"],
-    "description":"Tutoring for Statistik II (WTG, LMU): measure-theoretic probability, convergence of random variables, expectation as Lebesgue integral, LLN/CLT, exercise sheets, exam preparation. Languages: English, Turkish.",
-    "provider":{"@type":"Organization","name":"Independent tutoring"}
-  }
-  </script>
+    footer a { color: var(--accent); }
+  </style>
 </head>
 
 <body>
-  <main class="wrap">
+  <div class="container">
     <header>
-      <h1>Statistik II (WTG, LMU) – English Tutoring/ Türkçe Özel Ders</h1>
-      <p class="sub">
-        <strong>Wahrscheinlichkeitstheoretische Grundlagen der Statistik</strong> for <strong>Statistik II (WTG, LMU)</strong>
-        Clear, structured explanations of <strong>measure-theoretic probability</strong>.
-      </p>
-
-      <div class="pillrow" aria-label="keywords">
-        <span class="pill">Statistik II (LMU)</span>
-        <span class="pill">WTG</span>
-        <span class="pill">English tutoring</span>
-        <span class="pill">Turkish tutoring</span>
-        <span class="pill">Probability theory</span>
-        <span class="pill">Measure-theoretic probability</span>
-        <span class="pill">Exam preparation</span>
-      </div>
+      <a class="back" href="../../index.html">← Taylan Şengül</a>
+      <h1>Statistik II (WTG, LMU)</h1>
+      <p class="sub">Supplementary lecture notes and worked problem sets for <em>Wahrscheinlichkeitstheoretische Grundlagen der Statistik</em> (Statistik II, LMU München).</p>
+      <p class="position">Measure-theoretic probability</p>
     </header>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <div class="grid">
-        <div class="card">
-          <ul>
-            <li>I have 25 years of experience in tutoring mathematics and statistics working with students from all over the world.</li>
-            <li>Tutoring languages: English / Turkish.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <p class="muted">
-            In the past I have helped students with the following topics:
-          </p>
-          <ul class="muted">
-            <li>Differential equations (ODEs)</li>
-            <li>Partial differential equations (PDEs)</li>
-            <li>Dynamical systems</li>
-            <li>Calculus</li>
-            <li>Linear algebra</li>
-            <li>Analysis / real analysis</li>
-          </ul>
-          <p class="muted">Use the link below to request a session.</p>
-          <a class="cta" href="YOUR_CONTACT_LINK">mathtutor3210@gmail.com</a>
-          <p class="muted" style="margin-top:10px;">
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="offer">
-      <h2>What I help with (Statistik II focus)</h2>
-      <div class="grid">
-        <div class="card">
-          <ul>
-            <li>Distribution functions and probability measures (CDF as μ((−∞,x]))</li>
-            <li>Random variables as measurable functions</li>
-            <li>Expectation as Lebesgue integral (definition + computation tricks)</li>
-            <li>Conditional probability and independence (as in the slides)</li>
-          </ul>
-        </div>
-        <div class="card">
-          <ul>
-            <li>Convergence: almost sure / in probability / in distribution</li>
-            <li>LLN &amp; CLT: intuition + proof structure</li>
-            <li>Exercise sheets: clarify steps, fix logic, build templates (no solution dumping)</li>
-            <li>Exam preparation for Statistik II (LMU)</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <section id="course-map">
-      <h2>Course map (from the slides)</h2>
+      <div class="section-label">Course map</div>
       <div class="grid">
         <div class="card">
-          <p><strong>Gliederung</strong></p>
+          <p class="label">Gliederung</p>
           <ul>
             <li>Teil I: Maß- und Wahrscheinlichkeitstheorie</li>
             <li>Teil II: Verteilungen und ihre Eigenschaften</li>
             <li>Teil III: Konvergenz von Zufallsvariablen</li>
             <li>Teil IV: Mehrdimensionale Zufallsvariablen</li>
           </ul>
-          <p class="muted">Keywords: measure space, σ-algebra, Borel sets, probability measure.</p>
         </div>
         <div class="card">
-          <p><strong>Typical early bottlenecks</strong></p>
+          <p class="label">Core concepts</p>
           <ul>
-            <li>Why we need σ-algebras (Vitali-type issues)</li>
-            <li>From sets/events → measures → probability spaces</li>
-            <li>Almost sure / null sets vs “probability zero” intuition</li>
+            <li>Measure spaces, σ-algebras, Borel sets</li>
+            <li>Random variables as measurable functions</li>
+            <li>Expectation as a Lebesgue integral</li>
+            <li>Almost-sure, in-probability, and in-distribution convergence</li>
+            <li>Law of large numbers, central limit theorem</li>
           </ul>
         </div>
       </div>
     </section>
 
     <section id="notes">
-      <h2>Notes</h2>
-      <p class="muted">
-      </p>
-
-      <!-- NOTE TEMPLATE 1 -->
-      <ul>
-        <li>
-          <strong>Problems with solutions:</strong>
-          <a href="lmu_stat2_problems.pdf">lmu_stat2_problems.pdf</a>
-        </li>
-        <li>
-          <strong>English lecture notes:</strong>
-          <a href="lmu_stat2.pdf">lmu_stat2.pdf</a>
-        </li>
-      </ul>
-
-      <!-- Add more <details> blocks as needed -->
-    </section>
-
-    <section id="integrity">
-      <h2>Academic integrity</h2>
-      <p class="muted">
-        I don’t provide “copy-paste solutions.” I help you understand the steps, fix mistakes, and build a reusable
-        method.
-      </p>
+      <div class="section-label">Notes</div>
+      <div class="card">
+        <div class="link-row">
+          <a class="link-tag" href="lmu_stat2.pdf">Lecture notes (EN)</a>
+          <a class="link-tag" href="lmu_stat2_problems.pdf">Problem sets with solutions</a>
+        </div>
+      </div>
     </section>
 
     <footer>
-      <p class="muted">© <span id="year"></span> Statistik II (WTG, LMU) tutoring — English / Turkish.</p>
+      <p>Corrections or questions: <a href="mailto:taylansengul@gmail.com">taylansengul@gmail.com</a></p>
     </footer>
-  </main>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  </div>
 </body>
 
 </html>
