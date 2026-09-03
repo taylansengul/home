@@ -203,6 +203,7 @@ function renderPage(publications, language) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="${escapeHtml(strings.description)}">
+  <meta name="google-site-verification" content="bcMfvzL1d2pfMhWTkG37EBtRo-kM076lqfGrwLfaAos">
   <title>${escapeHtml(strings.title)}</title>
   <link rel="canonical" href="${strings.canonical}">
   <link rel="alternate" hreflang="en" href="https://taylansengul.github.io/home/publications.html">
