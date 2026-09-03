@@ -92,6 +92,10 @@ ${pages.map(renderUrl).join("\n")}
 </urlset>
 `;
 
+// GitHub Pages serves this repository as a project page, so crawlers only read
+// robots.txt from the domain root, which belongs to a different repository.
+// This file is therefore advisory; the stale files/index.html is kept out of
+// the index by a noindex meta tag in the file itself, not by the rule below.
 const robots = `User-agent: *
 Allow: /
 Disallow: /files/index.html
