@@ -6,7 +6,10 @@
   --accent-dark: #6f2d17;
   --bg: #f5f1eb;
   --card: #faf8f5;
-  --white: #fff;
+  --on-accent: #fff;
+  --body-copy: #393633;
+  --card-copy: #48433f;
+  --nav-bg: rgba(245, 241, 235, 0.96);
   --serif: "EB Garamond", Georgia, serif;
   --mono: "DM Mono", "Courier New", monospace;
 }
@@ -50,7 +53,7 @@ a:hover {
   z-index: 200;
   padding: 0.45rem 0.75rem;
   background: var(--ink);
-  color: var(--white);
+  color: var(--bg);
   font-family: var(--mono);
   font-size: 0.75rem;
   transform: translateY(-180%);
@@ -71,7 +74,7 @@ nav {
   gap: 0.5rem 1.5rem;
   padding: 0.7rem max(1.25rem, calc((100vw - 940px) / 2));
   border-bottom: 1px solid var(--rule);
-  background: rgba(245, 241, 235, 0.96);
+  background: var(--nav-bg);
 }
 
 .nav-name {
@@ -107,10 +110,19 @@ nav {
   color: var(--accent);
 }
 
-.language-link {
-  padding: 0.12rem 0.42rem;
+.nav-links .language-link {
+  padding: 0.2rem 0.58rem;
   border: 1px solid var(--accent);
   border-radius: 2px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+.nav-links .language-link:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+  color: var(--on-accent);
 }
 
 .container {
@@ -175,7 +187,7 @@ nav {
 .hero-bio {
   max-width: 650px;
   margin: 0 0 1.35rem;
-  color: #393633;
+  color: var(--body-copy);
   font-size: 1.05rem;
 }
 
@@ -203,7 +215,7 @@ nav {
 
 .button-links a:hover {
   background: var(--accent);
-  color: var(--white);
+  color: var(--on-accent);
 }
 
 section {
@@ -234,7 +246,7 @@ section {
 .section-intro {
   max-width: 740px;
   margin: -0.35rem 0 1.35rem;
-  color: #393633;
+  color: var(--body-copy);
 }
 
 .research-grid {
@@ -259,7 +271,7 @@ section {
 
 .research-card p {
   margin: 0;
-  color: #48433f;
+  color: var(--card-copy);
   font-size: 0.98rem;
 }
 
@@ -297,6 +309,80 @@ section {
   margin-top: 0.12rem;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.publications-page {
+  max-width: 820px;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-header h1 {
+  margin: 0 0 0.65rem;
+  font-size: clamp(2.35rem, 7vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.page-header p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--body-copy);
+}
+
+.page-header .page-meta {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.full-publication-list li {
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  padding: 1rem 0;
+}
+
+.publication-number {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 1.8;
+}
+
+.publication-title > a {
+  color: var(--ink);
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.publication-title > a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.doi-link {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.02rem 0.3rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.doi-link:hover {
+  border-color: var(--accent);
 }
 
 .section-more {
@@ -462,6 +548,27 @@ footer p {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ink: #f1ebe4;
+    --muted: #bbb1a8;
+    --rule: #514a44;
+    --accent: #e7a080;
+    --accent-dark: #f2b99f;
+    --bg: #1c1a18;
+    --card: #25221f;
+    --on-accent: #1c1a18;
+    --body-copy: #ded7cf;
+    --card-copy: #d0c7be;
+    --nav-bg: rgba(28, 26, 24, 0.96);
+  }
+
+  .hero img {
+    filter: sepia(6%) contrast(1.03) brightness(0.9);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -476,7 +583,8 @@ footer p {
   }
 
   body {
-    background: var(--white);
+    background: #fff;
+    color: #1a1a1a;
   }
 
   .container {

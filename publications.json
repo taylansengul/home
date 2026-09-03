@@ -1,0 +1,248 @@
+{
+  "source": "CV.tex",
+  "publications": [
+    {
+      "number": 27,
+      "authors": "Şengül, Taylan, and Burhan Tiryakioğlu",
+      "title": "The Effect of Nonlinearities With Arbitrary-Order Derivatives on Dynamic Transitions.",
+      "journal": "Mathematical Methods in the Applied Sciences",
+      "details": "48(6), 6704-6716",
+      "year": 2025,
+      "doi": "10.1002/mma.10709"
+    },
+    {
+      "number": 26,
+      "authors": "Şengül, Taylan, Burhan Tiryakioğlu, and Esmanur Yıldız Akıl",
+      "title": "First transition dynamics of reaction-diffusion equations with higher-order nonlinearity.",
+      "journal": "Studies in Applied Mathematics",
+      "details": "153(3)",
+      "year": 2024,
+      "doi": "10.1111/sapm.12735"
+    },
+    {
+      "number": 25,
+      "authors": "Efendiev, Messoud, Taylan Şengül, and Burhan Tiryakioğlu",
+      "title": "Two approaches to instability analysis of the viscous Burgers' equation.",
+      "journal": "Discrete and Continuous Dynamical Systems-S",
+      "details": "17(4)",
+      "year": 2024,
+      "doi": "10.3934/dcdss.2023202"
+    },
+    {
+      "number": 24,
+      "authors": "Şengül, Taylan, and Burhan Tiryakioğlu",
+      "title": "Interactions of (m, n) and (m+1, n) modes with real eigenvalues: A dynamic transition approach.",
+      "journal": "Communications in Nonlinear Science and Numerical Simulation",
+      "details": "127",
+      "year": 2023,
+      "doi": "10.1016/j.cnsns.2023.107526"
+    },
+    {
+      "number": 23,
+      "authors": "Şengül, Taylan, and Burhan Tiryakioğlu",
+      "title": "Dynamic transitions and bifurcations of 1D reaction-diffusion equations: The non-self-adjoint case.",
+      "journal": "Journal of Mathematical Analysis and Applications",
+      "details": "523(1)",
+      "year": 2023,
+      "doi": "10.1016/j.jmaa.2023.127114"
+    },
+    {
+      "number": 22,
+      "authors": "Şengül, Taylan, and Burhan Tiryakioğlu",
+      "title": "Dynamic transitions and bifurcations of 1D reaction-diffusion equations: The self-adjoint case.",
+      "journal": "Mathematical Methods in the Applied Sciences",
+      "details": "45(5)",
+      "year": 2022,
+      "doi": "10.1002/mma.7959"
+    },
+    {
+      "number": 21,
+      "authors": "Muntari, Umar Faruk, and Taylan Şengül",
+      "title": "Dynamic transitions and Turing patterns of the Brusselator model.",
+      "journal": "Mathematical Methods in the Applied Sciences",
+      "details": "45(16)",
+      "year": 2022,
+      "doi": "10.1002/mma.8296"
+    },
+    {
+      "number": 20,
+      "authors": "Chekroun, Mickael D., Henk Dijkstra, Taylan Şengül, and Shouhong Wang",
+      "title": "Transitions of zonal flows in a two-layer quasi-geostrophic ocean model.",
+      "journal": "Nonlinear Dynamics",
+      "details": "109",
+      "year": 2022,
+      "doi": "10.1007/s11071-022-07529-w"
+    },
+    {
+      "number": 19,
+      "authors": "Şengül, Taylan, and Esmanur Yıldız",
+      "title": "A dynamical systems approach to the interplay between tobacco smokers, electronic-cigarette smokers and smoking quitters.",
+      "journal": "Chaos, Solitons & Fractals",
+      "details": "146",
+      "year": 2021,
+      "doi": "10.1016/j.chaos.2021.110870"
+    },
+    {
+      "number": 18,
+      "authors": "Şengül, Taylan",
+      "title": "Dynamical transition theory of hexagonal pattern formations.",
+      "journal": "Communications in Nonlinear Science and Numerical Simulation",
+      "details": "91",
+      "year": 2020,
+      "doi": "10.1016/j.cnsns.2020.105455"
+    },
+    {
+      "number": 17,
+      "authors": "Bozkurt, Deniz, Ali Deliceoğlu, and Taylan Şengül",
+      "title": "Interior structural bifurcation of 2D symmetric incompressible flows.",
+      "journal": "Discrete & Continuous Dynamical Systems-B",
+      "details": "25(7)",
+      "year": 2020,
+      "doi": "10.3934/dcdsb.2020032"
+    },
+    {
+      "number": 16,
+      "authors": "Lu, ChunHsien, Yiqiu Mao, Taylan Şengül, and Quan Wang",
+      "title": "On the spectral instability and bifurcation of the 2D quasi-geostrophic potential vorticity equation with a generalized Kolmogorov forcing.",
+      "journal": "Physica D: Nonlinear Phenomena",
+      "details": "403",
+      "year": 2020,
+      "doi": "10.1016/j.physd.2019.132296"
+    },
+    {
+      "number": 15,
+      "authors": "Esen, Oğul, Daozhi Han, Taylan Şengül, and Quan Wang",
+      "title": "On the nonlinear stability and the existence of selective decay states of 3D quasi-geostrophic potential vorticity equation.",
+      "journal": "Mathematical Methods in the Applied Sciences",
+      "details": "43(2)",
+      "year": 2020,
+      "doi": "10.1002/mma.5962"
+    },
+    {
+      "number": 14,
+      "authors": "Pan, Zhigang, Taylan Şengül, and Quan Wang",
+      "title": "On the viscous instabilities and transitions of a two-layer model with a layered topography.",
+      "journal": "Communications in Nonlinear Science and Numerical Simulation",
+      "details": "80",
+      "year": 2020,
+      "doi": "10.1016/j.cnsns.2019.104978"
+    },
+    {
+      "number": 13,
+      "authors": "Özer, Saadet, Taylan Şengül, and Quan Wang",
+      "title": "Multiple equilibria and transitions in spherical MHD equations.",
+      "journal": "Communications in Mathematical Sciences",
+      "details": "17(6)",
+      "year": 2019,
+      "doi": "10.4310/cms.2019.v17.n6.a3"
+    },
+    {
+      "number": 12,
+      "authors": "Kieu, Chanh, Taylan Şengül, Quan Wang, and Dongming Yan",
+      "title": "On the Hopf (double Hopf) bifurcations and transitions of two-layer western boundary currents.",
+      "journal": "Communications in Nonlinear Science and Numerical Simulation",
+      "details": "65",
+      "year": 2018,
+      "doi": "10.1016/j.cnsns.2018.05.010"
+    },
+    {
+      "number": 11,
+      "authors": "Şengül, Taylan, and Shouhong Wang",
+      "title": "Dynamic transitions and baroclinic instability for 3D continuously stratified Boussinesq flows.",
+      "journal": "Journal of Mathematical Fluid Mechanics",
+      "details": "20(3)",
+      "year": 2018,
+      "doi": "10.1007/s00021-018-0361-x"
+    },
+    {
+      "number": 10,
+      "authors": "Özer, Saadet, and Taylan Şengül",
+      "title": "Transitions of spherical thermohaline circulation to multiple equilibria.",
+      "journal": "Journal of Mathematical Fluid Mechanics",
+      "details": "20(2)",
+      "year": 2018,
+      "doi": "10.1007/s00021-017-0331-8"
+    },
+    {
+      "number": 9,
+      "authors": "Özer, Saadet, and Taylan Şengül",
+      "title": "Stability and transitions of the second grade Poiseuille flow.",
+      "journal": "Physica D: Nonlinear Phenomena",
+      "details": "331",
+      "year": 2016,
+      "doi": "10.1016/j.physd.2016.05.012"
+    },
+    {
+      "number": 8,
+      "authors": "Liu, Honghu, Taylan Şengül, Shouhong Wang, and Pingwen Zhang",
+      "title": "Dynamic transitions and pattern formations for a Cahn-Hilliard model with long-range repulsive interactions.",
+      "journal": "Communications in Mathematical Sciences",
+      "details": "13(5)",
+      "year": 2015,
+      "doi": "10.4310/cms.2015.v13.n5.a10"
+    },
+    {
+      "number": 7,
+      "authors": "Dijkstra, Henk, Taylan Şengül, Jie Shen, and Shouhong Wang",
+      "title": "Dynamic transitions of quasi-geostrophic channel flow.",
+      "journal": "SIAM Journal on Applied Mathematics",
+      "details": "75(5)",
+      "year": 2015,
+      "doi": "10.1137/15m1008166"
+    },
+    {
+      "number": 6,
+      "authors": "Şengül, Taylan, Jie Shen, and Shouhong Wang",
+      "title": "Pattern formations of 2D Rayleigh–Bénard convection with no-slip boundary conditions for the velocity at the critical length scales.",
+      "journal": "Mathematical Methods in the Applied Sciences",
+      "details": "38(17)",
+      "year": 2014,
+      "doi": "10.1002/mma.3317"
+    },
+    {
+      "number": 5,
+      "authors": "Şengül, Taylan, and Shouhong Wang",
+      "title": "Pattern formation and dynamic transition for magnetohydrodynamic convection.",
+      "journal": "Communications on Pure and Applied Analysis",
+      "details": "13(6)",
+      "year": 2014,
+      "doi": "10.3934/cpaa.2014.13.2609"
+    },
+    {
+      "number": 4,
+      "authors": "Dijkstra, Henk, Taylan Şengül, and Shouhong Wang",
+      "title": "Dynamic transitions of surface tension driven convection.",
+      "journal": "Physica D: Nonlinear Phenomena",
+      "details": "247(1)",
+      "year": 2013,
+      "doi": "10.1016/j.physd.2012.12.008"
+    },
+    {
+      "number": 3,
+      "authors": "Şengül, Taylan, and Shouhong Wang",
+      "title": "Pattern formation in Rayleigh–Bénard convection.",
+      "journal": "Communications in Mathematical Sciences",
+      "details": "11(1)",
+      "year": 2013,
+      "doi": "10.4310/cms.2013.v11.n1.a10"
+    },
+    {
+      "number": 2,
+      "authors": "Liu, Honghu, Taylan Şengül, and Shouhong Wang",
+      "title": "Dynamic transitions for quasilinear systems and Cahn-Hilliard equation with Onsager mobility.",
+      "journal": "Journal of Mathematical Physics",
+      "details": "53",
+      "year": 2012,
+      "doi": "10.1063/1.3687414"
+    },
+    {
+      "number": 1,
+      "authors": "Şengül, Taylan",
+      "title": "An effective method for the existence of the global attractor of a nonlinear wave equation.",
+      "journal": "Applied Mathematics E-Notes",
+      "details": "7",
+      "year": 2007,
+      "doi": null
+    }
+  ]
+}
