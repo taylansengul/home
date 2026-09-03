@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://taylansengul.github.io/home/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taylansengul.github.io/home/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://taylansengul.github.io/home/tr.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taylansengul.github.io/home/"/>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/tr.html</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taylansengul.github.io/home/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://taylansengul.github.io/home/tr.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taylansengul.github.io/home/"/>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/publications.html</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taylansengul.github.io/home/publications.html"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://taylansengul.github.io/home/yayinlar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taylansengul.github.io/home/publications.html"/>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/yayinlar.html</loc>
+    <lastmod>2026-09-03</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://taylansengul.github.io/home/publications.html"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://taylansengul.github.io/home/yayinlar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://taylansengul.github.io/home/publications.html"/>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/other/lmustat2/</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/files/bilim_tarihi_2025_I.html</loc>
+    <lastmod>2025-11-05</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/files/guz_2025_bilim_tarihi_sunum.html</loc>
+    <lastmod>2026-01-11</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/files/bilim_tarihi_2023.html</loc>
+    <lastmod>2025-07-15</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/files/bilimtarihinotlari.html</loc>
+    <lastmod>2025-07-15</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/files/numpy1.html</loc>
+    <lastmod>2025-07-15</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://taylansengul.github.io/home/files/numpy2.html</loc>
+    <lastmod>2025-07-15</lastmod>
+    <priority>0.3</priority>
+  </url>
+</urlset>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /files/index.html
+
+Sitemap: https://taylansengul.github.io/home/sitemap.xml
