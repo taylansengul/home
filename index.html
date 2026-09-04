@@ -35,6 +35,7 @@
     <a class="nav-name" href="#top">Taylan Şengül</a>
     <ul class="nav-links">
       <li><a href="#research">Research</a></li>
+      <li><a href="#group">Group</a></li>
       <li><a href="publications.html">Publications</a></li>
       <li><a href="#teaching">Teaching</a></li>
       <li><a href="#notes">Notes</a></li>
@@ -66,18 +67,70 @@
     <section id="research" aria-labelledby="research-title">
       <h2 class="section-heading" id="research-title">Research</h2>
       <p class="section-intro">
-        My work combines qualitative methods, reductions and stability analysis to understand how nonlinear systems change regime and form coherent structures.
+        When a nonlinear system loses stability, linear theory says only that it does — not what happens next.
+        My work is about what happens next: whether the loss of stability is continuous or catastrophic, which
+        pattern the system selects, and whether the new state is unique.
+        The tool is dynamic transition theory: reduce the dynamics to the centre manifold spanned by the critical
+        modes, then read the transition type off a small number of coefficients that can, in the right coordinates,
+        be computed in closed form.
       </p>
       <div class="research-grid">
         <article class="research-card">
-          <h3>Dynamical systems and pattern formation</h3>
-          <p>Dynamic transitions, bifurcations, symmetry, model reduction and patterns in nonlinear evolution equations.</p>
+          <h3>Transition numbers in closed form</h3>
+          <p>
+            Most of my recent work pushes the reduction far enough that the transition coefficient becomes an
+            explicit formula in the parameters of the equation, rather than a number left to numerics.
+            This has been carried out for 1D reaction–diffusion equations in the
+            <a href="publications.html#publication-22">self-adjoint</a> and
+            <a href="publications.html#publication-23">non-self-adjoint</a> cases, for
+            <a href="publications.html#publication-26">higher-order nonlinearities</a>, and for
+            <a href="publications.html#publication-27">nonlinearities carrying derivatives of arbitrary order</a>.
+          </p>
         </article>
         <article class="research-card">
-          <h3>Fluid dynamics and instability</h3>
-          <p>Classical and geophysical fluid dynamics, hydrodynamic instabilities and transitions in atmosphere-ocean models.</p>
+          <h3>Symmetry, mode interaction and pattern selection</h3>
+          <p>
+            Symmetry forces eigenvalues to cross in groups, so the interesting transitions are rarely simple.
+            I study what the resulting degenerate crossings select — 
+            <a href="publications.html#publication-24">interactions of neighbouring modes</a>,
+            <a href="publications.html#publication-18">hexagonal patterns</a>,
+            <a href="publications.html#publication-3">rolls and rectangles in Rayleigh–Bénard convection</a> —
+            and, currently, Hopf bifurcation under O(2) symmetry, where the nonlinearity's structure can force the
+            bifurcation direction to degenerate.
+          </p>
+        </article>
+        <article class="research-card">
+          <h3>Geophysical and classical fluids</h3>
+          <p>
+            The same machinery applied where the transition has a physical name:
+            <a href="publications.html#publication-10">multiple equilibria of the thermohaline circulation</a>,
+            <a href="publications.html#publication-20">zonal flows in a two-layer quasi-geostrophic ocean</a>,
+            <a href="publications.html#publication-12">double Hopf bifurcation of western boundary currents</a>,
+            and instabilities of
+            <a href="publications.html#publication-9">non-Newtonian Poiseuille flow</a> and the
+            <a href="publications.html#publication-25">viscous Burgers equation</a>.
+          </p>
         </article>
       </div>
+    </section>
+
+    <section id="group" aria-labelledby="group-title">
+      <h2 class="section-heading" id="group-title">Group and service</h2>
+      <p class="section-intro">
+        I supervise a small group working on dynamic transitions and their reductions. Active lines:
+      </p>
+      <ul class="misc-list">
+        <li><span class="link-row-label">PhD</span> Transitions in delay systems · degenerate transition numbers, where the leading transition coefficient vanishes</li>
+        <li><span class="link-row-label">MSc</span> Transitions with drift on a periodic ring · the degenerate Bautin locus of a Robin-type boundary problem</li>
+        <li><span class="link-row-label">Undergraduate</span> Symbolic computation of the bifurcation direction for the FitzHugh–Nagumo equation with Robin boundary conditions</li>
+        <li><span class="link-row-label">Postdoc</span> Modulation and long-interval asymptotics of dynamic transitions</li>
+      </ul>
+      <p class="section-more">
+        Prospective students: I have no funded position open, but I keep a bank of well-posed problems and am glad
+        to discuss one. Write with a short note on what you have read.
+        I serve as an <strong>Associate Editor</strong> of
+        <a href="https://onlinelibrary.wiley.com/journal/10991476"><em>Mathematical Methods in the Applied Sciences</em></a> (since 2021).
+      </p>
     </section>
 
     <section id="publications" aria-labelledby="publications-title">

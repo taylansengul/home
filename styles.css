@@ -596,3 +596,7 @@ footer p {
     display: block;
   }
 }
+
+.misc-list .link-row-label {
+  margin-right: 0.5rem;
+}
