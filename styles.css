@@ -600,3 +600,15 @@ footer p {
 .misc-list .link-row-label {
   margin-right: 0.5rem;
 }
+
+.archive.weeks {
+  margin: 0.35rem 0 0.65rem;
+}
+
+.archive.weeks summary {
+  padding: 0.55rem 0.7rem;
+}
+
+.archive.weeks .link-row {
+  padding: 0.7rem;
+}
