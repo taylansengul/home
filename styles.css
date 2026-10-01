@@ -137,8 +137,6 @@ nav {
   gap: 2.7rem;
   align-items: start;
   margin-bottom: 4rem;
-  padding-bottom: 3.3rem;
-  border-bottom: 1px solid var(--rule);
 }
 
 .hero img {

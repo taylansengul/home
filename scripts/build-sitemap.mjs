@@ -40,7 +40,6 @@ const pages = [
     priority: "0.7",
     alternates: { en: "teaching.html", tr: "dersler.html" },
   },
-  { file: "other/lmustat2/index.html", loc: "other/lmustat2/", priority: "0.5" },
   { file: "files/bilim_tarihi_2025_I.html", loc: "files/bilim_tarihi_2025_I.html", priority: "0.5" },
   { file: "files/guz_2025_bilim_tarihi_sunum.html", loc: "files/guz_2025_bilim_tarihi_sunum.html", priority: "0.5" },
   { file: "files/bilim_tarihi_2023.html", loc: "files/bilim_tarihi_2023.html", priority: "0.4" },
