@@ -367,17 +367,13 @@ section {
 .course-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 1px;
-  overflow: hidden;
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  background: var(--rule);
+  gap: 0 2.5rem;
 }
 
 .course-card {
   min-width: 0;
-  padding: 1.25rem 1.35rem;
-  background: var(--card);
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
 }
 
 .course-card h3 {
@@ -439,10 +435,6 @@ section {
   border-bottom: 1px solid var(--rule);
 }
 
-.archive .course-grid {
-  border: 0;
-  border-radius: 0 0 4px 4px;
-}
 
 .research-lines {
   margin: 0;
