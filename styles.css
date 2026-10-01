@@ -470,6 +470,22 @@ section {
   border-radius: 0 0 4px 4px;
 }
 
+.research-lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.research-lines li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1rem;
+}
+
+.research-lines li:last-child {
+  border-bottom: 0;
+}
+
 .misc-list {
   margin: 0;
   padding: 0;
