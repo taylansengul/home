@@ -186,7 +186,6 @@ function renderPage(publications, preprints, language) {
         preprints: "Önbaskılar",
         articles: "Dergi makaleleri",
         preprintsIntro: "Hakem değerlendirmesinde olan, arXiv'de yayımlanmış çalışmalar.",
-        complete: `${publications.length} yayın · yeniden eskiye sıralı`,
         scholar: "Google Scholar profili",
         footerLocation: "İstanbul, Türkiye",
         skip: "İçeriğe geç",
@@ -205,7 +204,6 @@ function renderPage(publications, preprints, language) {
         preprints: "Preprints",
         articles: "Journal articles",
         preprintsIntro: "Work under review, available on arXiv.",
-        complete: `${publications.length} publications · newest first`,
         scholar: "Google Scholar profile",
         footerLocation: "Istanbul, Türkiye",
         skip: "Skip to content",
@@ -256,7 +254,7 @@ function renderPage(publications, preprints, language) {
     <header class="page-header">
       <p class="eyebrow">Taylan Şengül</p>
       <h1>${strings.heading}</h1>
-      <p class="page-meta">${strings.complete} · <a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&amp;hl=${isTurkish ? "tr" : "en"}">${strings.scholar}</a></p>
+      <p class="page-meta"><a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&amp;hl=${isTurkish ? "tr" : "en"}">${strings.scholar}</a></p>
     </header>
 ${preprints.length > 0 ? `    <section class="preprints" aria-labelledby="preprints-heading">
       <h2 id="preprints-heading">${strings.preprints}</h2>
