@@ -183,7 +183,6 @@ function renderPage(publications, preprints, language) {
         languageLabel: "English",
         languageHref: "publications.html",
         heading: "Yayınlar",
-        intro: "Hakemli dergilerde yayımlanan makaleler. DOI bağlantıları Crossref ve yayıncı kayıtlarıyla doğrulanmıştır.",
         preprints: "Önbaskılar",
         articles: "Dergi makaleleri",
         preprintsIntro: "Hakem değerlendirmesinde olan, arXiv'de yayımlanmış çalışmalar.",
@@ -203,7 +202,6 @@ function renderPage(publications, preprints, language) {
         languageLabel: "Türkçe",
         languageHref: "yayinlar.html",
         heading: "Publications",
-        intro: "Peer-reviewed journal articles. DOI links are verified against Crossref and publisher records.",
         preprints: "Preprints",
         articles: "Journal articles",
         preprintsIntro: "Work under review, available on arXiv.",
@@ -258,7 +256,6 @@ function renderPage(publications, preprints, language) {
     <header class="page-header">
       <p class="eyebrow">Taylan Şengül</p>
       <h1>${strings.heading}</h1>
-      <p>${strings.intro}</p>
       <p class="page-meta">${strings.complete} · <a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&amp;hl=${isTurkish ? "tr" : "en"}">${strings.scholar}</a></p>
     </header>
 ${preprints.length > 0 ? `    <section class="preprints" aria-labelledby="preprints-heading">
