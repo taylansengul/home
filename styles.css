@@ -249,32 +249,6 @@ section {
   color: var(--body-copy);
 }
 
-.research-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.research-card {
-  padding: 1.25rem 1.35rem;
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  background: var(--card);
-}
-
-.research-card h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.08rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.research-card p {
-  margin: 0;
-  color: var(--card-copy);
-  font-size: 0.98rem;
-}
-
 .publication-list {
   margin: 0;
   padding: 0;
@@ -558,9 +532,6 @@ footer p {
     height: 160px;
   }
 
-  .research-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 420px) {
