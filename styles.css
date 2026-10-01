@@ -199,10 +199,13 @@ nav {
 
 .button-links a,
 .link-tag {
-  border: 1px solid var(--rule);
-  border-radius: 2px;
   font-family: var(--mono);
   text-decoration: none;
+}
+
+.button-links a {
+  border: 1px solid var(--rule);
+  border-radius: 2px;
 }
 
 .button-links a {
@@ -386,7 +389,7 @@ section {
 .link-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.35rem 0.9rem;
   margin-top: 0.4rem;
 }
 
@@ -403,14 +406,15 @@ section {
 
 .link-tag {
   display: inline-block;
-  padding: 0.15em 0.55em;
-  background: var(--bg);
+  padding: 0.15em 0;
   color: var(--muted);
   font-size: 0.67rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .link-tag:hover {
-  border-color: var(--accent);
   color: var(--accent);
 }
 
