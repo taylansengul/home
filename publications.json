@@ -247,11 +247,29 @@
   ],
   "preprints": [
     {
-      "number": 1,
+      "number": 3,
       "authors": "Şengül, Taylan, Burhan Tiryakioğlu, and Esmanur Yıldız Akıl",
       "title": "Transition dynamics in general two-component reaction-diffusion systems.",
       "journal": "arXiv preprint",
       "details": "2609.38450",
+      "year": 2026,
+      "doi": null
+    },
+    {
+      "number": 2,
+      "authors": "Şengül, Taylan, and Bünyamin Kurtkaya",
+      "title": "Delay placement governs feasibility and Hopf bifurcation in a pollution-based tourism model.",
+      "journal": "arXiv preprint",
+      "details": "2609.10452",
+      "year": 2026,
+      "doi": null
+    },
+    {
+      "number": 1,
+      "authors": "Özer, Saadet S., Taylan Şengül, and Burhan Tiryakioğlu",
+      "title": "Wave selection at an O(2)-Hopf bifurcation in conservative two-component PDE systems.",
+      "journal": "arXiv preprint",
+      "details": "2608.24376",
       "year": 2026,
       "doi": null
     }
