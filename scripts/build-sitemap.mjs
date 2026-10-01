@@ -45,8 +45,6 @@ const pages = [
   { file: "files/guz_2025_bilim_tarihi_sunum.html", loc: "files/guz_2025_bilim_tarihi_sunum.html", priority: "0.5" },
   { file: "files/bilim_tarihi_2023.html", loc: "files/bilim_tarihi_2023.html", priority: "0.4" },
   { file: "files/bilimtarihinotlari.html", loc: "files/bilimtarihinotlari.html", priority: "0.4" },
-  { file: "files/numpy1.html", loc: "files/numpy1.html", priority: "0.3" },
-  { file: "files/numpy2.html", loc: "files/numpy2.html", priority: "0.3" },
 ];
 
 // Last commit that touched the file, falling back to the filesystem for
