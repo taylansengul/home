@@ -244,5 +244,16 @@
       "year": 2007,
       "doi": null
     }
+  ],
+  "preprints": [
+    {
+      "number": 1,
+      "authors": "Şengül, Taylan, Burhan Tiryakioğlu, and Esmanur Yıldız Akıl",
+      "title": "Transition dynamics in general two-component reaction-diffusion systems.",
+      "journal": "arXiv preprint",
+      "details": "2609.38450",
+      "year": 2026,
+      "doi": null
+    }
   ]
 }

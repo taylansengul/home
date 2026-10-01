@@ -35,10 +35,11 @@ function normalizeTitle(value) {
     .replace(/[^a-z0-9]+/g, "");
 }
 
-function parsePublications(source) {
-  const section = source.match(/\\section\*\{Publications\}([\s\S]*?)\\end\{etaremune\}/);
+function parseItemSection(source, name, { required = true } = {}) {
+  const section = source.match(new RegExp(`\\\\section\\*\\{${name}\\}([\\s\\S]*?)\\\\end\\{etaremune\\}`));
   if (!section) {
-    throw new Error("The Publications section was not found in the CV source.");
+    if (required) throw new Error(`The ${name} section was not found in the CV source.`);
+    return [];
   }
 
   const itemLines = section[1]
@@ -50,7 +51,7 @@ function parsePublications(source) {
     const item = line.replace(/^\\item\s+/, "");
     const match = item.match(/^(.*?)\s+``(.*?)''\s+\\emph\{(.*?)\},\s+(.*?),\s+(\d{4})\.$/);
     if (!match) {
-      throw new Error(`Could not parse publication ${index + 1}: ${line}`);
+      throw new Error(`Could not parse ${name} item ${index + 1}: ${line}`);
     }
 
     return {
@@ -159,7 +160,16 @@ function publicationMarkup(publication) {
         </li>`;
 }
 
-function renderPage(publications, language) {
+function preprintMarkup(preprint) {
+  const title = escapeHtml(preprint.title);
+  const arxivUrl = `https://arxiv.org/abs/${encodeURI(preprint.details)}`;
+  return `        <li id="preprint-${preprint.number}">
+          <span class="publication-number" aria-label="Preprint ${preprint.number}">P${preprint.number}</span>
+          <p class="publication-title"><a href="${arxivUrl}">${title}</a><span class="publication-meta">${escapeHtml(preprint.authors)} · <em>${escapeHtml(preprint.journal)}</em>, <a class="doi-link" href="${arxivUrl}" aria-label="arXiv for ${title}">arXiv:${escapeHtml(preprint.details)}</a> (${preprint.year})</span></p>
+        </li>`;
+}
+
+function renderPage(publications, preprints, language) {
   const isTurkish = language === "tr";
   const strings = isTurkish
     ? {
@@ -174,6 +184,9 @@ function renderPage(publications, language) {
         languageHref: "publications.html",
         heading: "Yayınlar",
         intro: "Hakemli dergilerde yayımlanan makaleler. DOI bağlantıları Crossref ve yayıncı kayıtlarıyla doğrulanmıştır.",
+        preprints: "Önbaskılar",
+        articles: "Dergi makaleleri",
+        preprintsIntro: "Hakem değerlendirmesinde olan, arXiv'de yayımlanmış çalışmalar.",
         complete: `${publications.length} yayın · yeniden eskiye sıralı`,
         scholar: "Google Scholar profili",
         footerLocation: "İstanbul, Türkiye",
@@ -191,6 +204,9 @@ function renderPage(publications, language) {
         languageHref: "yayinlar.html",
         heading: "Publications",
         intro: "Peer-reviewed journal articles. DOI links are verified against Crossref and publisher records.",
+        preprints: "Preprints",
+        articles: "Journal articles",
+        preprintsIntro: "Work under review, available on arXiv.",
         complete: `${publications.length} publications · newest first`,
         scholar: "Google Scholar profile",
         footerLocation: "Istanbul, Türkiye",
@@ -233,7 +249,7 @@ function renderPage(publications, language) {
     <a class="nav-name" href="${isTurkish ? "tr.html" : "index.html"}">Taylan Şengül</a>
     <ul class="nav-links">
       <li><a href="${isTurkish ? "tr.html" : "index.html"}">${strings.home}</a></li>
-      <li><a href="${isTurkish ? "tr.html" : "index.html"}#teaching">${strings.teaching}</a></li>
+      <li><a href="${isTurkish ? "dersler.html" : "teaching.html"}">${strings.teaching}</a></li>
       <li><a href="files/CV.pdf">${strings.cv}</a></li>
       <li><a class="language-link" href="${strings.languageHref}" hreflang="${isTurkish ? "en" : "tr"}">${strings.languageLabel}</a></li>
     </ul>
@@ -245,7 +261,15 @@ function renderPage(publications, language) {
       <p>${strings.intro}</p>
       <p class="page-meta">${strings.complete} · <a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&amp;hl=${isTurkish ? "tr" : "en"}">${strings.scholar}</a></p>
     </header>
-    <ol class="publication-list full-publication-list" reversed start="${publications.length}">
+${preprints.length > 0 ? `    <section class="preprints" aria-labelledby="preprints-heading">
+      <h2 id="preprints-heading">${strings.preprints}</h2>
+      <p class="section-intro">${strings.preprintsIntro}</p>
+      <ol class="publication-list full-publication-list" reversed start="${preprints.length}">
+${preprints.map(preprintMarkup).join("\n")}
+      </ol>
+    </section>
+    <h2 id="articles-heading">${strings.articles}</h2>
+` : ""}    <ol class="publication-list full-publication-list" reversed start="${publications.length}">
 ${publications.map(publicationMarkup).join("\n")}
     </ol>
     <footer>
@@ -259,7 +283,8 @@ ${publications.map(publicationMarkup).join("\n")}
 }
 
 const cvSource = fs.readFileSync(cvPath, "utf8");
-const publications = parsePublications(cvSource);
+const publications = parseItemSection(cvSource, "Publications");
+const preprints = parseItemSection(cvSource, "Preprints", { required: false });
 const existingDois = loadExistingDois();
 for (const publication of publications) {
   publication.doi = existingDois.get(normalizeTitle(publication.title)) || null;
@@ -271,10 +296,10 @@ if (refreshDois) {
 
 fs.writeFileSync(
   dataPath,
-  `${JSON.stringify({ source: path.basename(cvPath), publications }, null, 2)}\n`,
+  `${JSON.stringify({ source: path.basename(cvPath), publications, preprints }, null, 2)}\n`,
 );
-fs.writeFileSync(path.join(siteRoot, "publications.html"), renderPage(publications, "en"));
-fs.writeFileSync(path.join(siteRoot, "yayinlar.html"), renderPage(publications, "tr"));
+fs.writeFileSync(path.join(siteRoot, "publications.html"), renderPage(publications, preprints, "en"));
+fs.writeFileSync(path.join(siteRoot, "yayinlar.html"), renderPage(publications, preprints, "tr"));
 
 const doiCount = publications.filter((publication) => publication.doi).length;
-console.log(`Generated ${publications.length} publications (${doiCount} with verified DOI links).`);
+console.log(`Generated ${publications.length} publications (${doiCount} with verified DOI links) and ${preprints.length} preprints.`);
