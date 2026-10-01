@@ -247,11 +247,20 @@
   ],
   "preprints": [
     {
-      "number": 3,
+      "number": 4,
       "authors": "Şengül, Taylan, Burhan Tiryakioğlu, and Esmanur Yıldız Akıl",
       "title": "Transition dynamics in general two-component reaction-diffusion systems.",
       "journal": "arXiv preprint",
       "details": "2609.38450",
+      "year": 2026,
+      "doi": null
+    },
+    {
+      "number": 3,
+      "authors": "Şengül, Taylan",
+      "title": "Variational nonlinearities and wave selection at an O(2)-Hopf bifurcation.",
+      "journal": "arXiv preprint",
+      "details": "2609.22779",
       "year": 2026,
       "doi": null
     },
