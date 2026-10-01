@@ -507,6 +507,16 @@ footer p {
   margin: 0;
 }
 
+.footer-quiet {
+  margin-left: 0.6rem;
+  opacity: 0.45;
+  text-decoration: none;
+}
+
+.footer-quiet:hover {
+  opacity: 1;
+}
+
 @media (max-width: 680px) {
   nav {
     align-items: flex-start;
