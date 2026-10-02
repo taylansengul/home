@@ -90,6 +90,7 @@
   function build() {
     document.querySelectorAll(".motif").forEach((e) => e.remove());
     walkers.length = 0; // a rebuild drops the walkers with their margins
+    panels.length = 0;
     const main = document.querySelector("main");
     if (!main) return;
     // Content edges: the widest child of <main>, since the homepage stops at the bio measure.
@@ -127,7 +128,8 @@
         hit.className = "motif";
         hit.setAttribute("aria-hidden", "true");
         hit.style.cssText = `position:absolute;top:0;left:${x}px;width:${cols * cw}px;height:${height}px;z-index:0`;
-        const panel = { x, lines, cols, cw, lh, fs };
+        const panel = { x, lines, cols, cw, lh, fs, active: false };
+        panels.push(panel);
         hit.addEventListener("click", (ev) => drop(panel, Math.floor(ev.pageY / lh), Math.floor((ev.pageX - x) / cw)));
         document.body.appendChild(hit);
       }
@@ -143,12 +145,19 @@
   // long as both together; the chance of annihilating is the mean of their
   // tempers, so it differs from collision to collision.
   const STEP = 70, LIFETIME = 45000, MAX_WALKERS = 40, MAX_LENGTH = 80, GRACE = 2000;
+  // Sources, so the population settles instead of dying out: once a margin
+  // has been clicked it keeps releasing walkers on its own (about one every
+  // BIRTH ms, at a random visible spot), and a long walker sometimes splits
+  // in two (FISSION per step, from SPLIT_AT cells on).
+  const BIRTH = 3500, FISSION = 0.012, SPLIT_AT = 10;
+  const panels = [];
   const walkers = [];
   let ticking = null;
   const MOVES = [[1, -1], [1, 1], [-1, -1], [-1, 1], [0, -2], [0, 2], [1, 0], [-1, 0], [0, -1], [0, 1]];
 
   function drop(panel, startRow, startCol) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || walkers.length >= MAX_WALKERS) return;
+    panel.active = true;
     const { lines, cols } = panel;
     const live = (r, c) => c >= 0 && c < cols && r >= 0 && r < lines.length && lines[r][c] !== " " && lines[r][c] !== undefined;
     let row = Math.max(0, startRow), col = Math.max(0, Math.min(cols - 1, startCol));
@@ -250,8 +259,39 @@
     });
   }
 
+  // Split a long walker: the back half leaves as a new walker, tail first.
+  function split(w, now) {
+    const half = Math.floor(w.body.length / 2);
+    const back = w.body.splice(half).reverse();
+    w.length = Math.max(1, Math.floor(w.length / 2));
+    w.born = now;
+    walkers.push({
+      ...w,
+      body: back,
+      length: back.length,
+      heading: MOVES[Math.floor(Math.random() * MOVES.length)],
+      pRight: 0.2 + 0.6 * Math.random(),
+      pDown: 0.2 + 0.6 * Math.random(),
+      temper: Math.random(),
+      els: [],
+    });
+  }
+
+  function spawn(panel) {
+    const { lh, cols } = panel;
+    const top = Math.floor(window.scrollY / lh) + 5;
+    const bottom = Math.min(panel.lines.length - 1, Math.floor((window.scrollY + window.innerHeight) / lh) - 1);
+    if (bottom <= top) return;
+    drop(panel, top + Math.floor(Math.random() * (bottom - top)), Math.floor(Math.random() * cols));
+  }
+
   function tick() {
+    if (document.hidden) return; // a background tab costs nothing
     const now = performance.now();
+    for (const p of panels) if (p.active && Math.random() < STEP / BIRTH) spawn(p);
+    for (const w of walkers.slice()) {
+      if (!w.dead && w.length >= SPLIT_AT && now - w.born > GRACE && walkers.length < MAX_WALKERS && Math.random() < FISSION) split(w, now);
+    }
     for (const w of walkers) {
       if (w.dead) continue;
       if (now - w.born > LIFETIME) { vanish(w); continue; }
@@ -260,7 +300,7 @@
     collide();
     for (let i = walkers.length - 1; i >= 0; i--) if (walkers[i].dead) walkers.splice(i, 1);
     walkers.forEach(draw);
-    if (walkers.length === 0) { clearInterval(ticking); ticking = null; }
+    if (walkers.length === 0 && !panels.some((p) => p.active)) { clearInterval(ticking); ticking = null; }
   }
 
   let pending;
