@@ -142,7 +142,7 @@
   // into another walker the two either annihilate or merge into one walker as
   // long as both together; the chance of annihilating is the mean of their
   // tempers, so it differs from collision to collision.
-  const STEP = 70, LIFETIME = 45000, MAX_WALKERS = 40, MAX_LENGTH = 80;
+  const STEP = 70, LIFETIME = 45000, MAX_WALKERS = 40, MAX_LENGTH = 80, GRACE = 2000;
   const walkers = [];
   let ticking = null;
   const MOVES = [[1, -1], [1, 1], [-1, -1], [-1, 1], [0, -2], [0, 2], [1, 0], [-1, 0], [0, -1], [0, 1]];
@@ -152,15 +152,17 @@
     const { lines, cols } = panel;
     const live = (r, c) => c >= 0 && c < cols && r >= 0 && r < lines.length && lines[r][c] !== " " && lines[r][c] !== undefined;
     let row = Math.max(0, startRow), col = Math.max(0, Math.min(cols - 1, startCol));
-    search: for (let d = 0; d < 12; d++) {
+    // Start on the nearest non-blank cell that no walker occupies yet.
+    const taken = (r, c) => walkers.some((w) => w.panel === panel && w.body.some(([br, bc]) => br === r && bc === c));
+    search: for (let d = 0; d < 24; d++) {
       for (const [dr, dc] of [[0, -d], [0, d], [-d, 0], [d, 0], [d, d], [-d, -d], [d, -d], [-d, d]]) {
-        if (live(row + dr, col + dc)) { row += dr; col += dc; break search; }
+        if (live(row + dr, col + dc) && !taken(row + dr, col + dc)) { row += dr; col += dc; break search; }
       }
     }
     walkers.push({
       panel, live,
       body: [[row, col]],
-      length: 3 + Math.floor(Math.random() * 6),
+      length: 2 + Math.floor(Math.random() ** 2 * 24), // mostly short, now and then long
       heading: MOVES[Math.floor(Math.random() * 4)],
       pRight: 0.2 + 0.6 * Math.random(),
       pDown: 0.2 + 0.6 * Math.random(),
@@ -214,11 +216,13 @@
   }
 
   function collide() {
+    const now = performance.now();
     for (const a of walkers) {
-      if (a.dead) continue;
+      // A walker fresh from a click or a merger is not hit for a moment.
+      if (a.dead || now - a.born < GRACE) continue;
       const [hr, hc] = a.body[0];
       for (const b of walkers) {
-        if (b === a || b.dead || b.panel !== a.panel) continue;
+        if (b === a || b.dead || b.panel !== a.panel || now - b.born < GRACE) continue;
         if (!b.body.some(([r, c]) => r === hr && c === hc)) continue;
         if (Math.random() < (a.temper + b.temper) / 2) {
           vanish(a);
