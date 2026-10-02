@@ -120,7 +120,71 @@
       pre.style.cssText = `position:absolute;top:0;left:${x}px;width:${cols * cw}px;margin:0;font:${fs}px/${lh}px var(--mono);color:var(--muted);opacity:.28;pointer-events:none;user-select:none;z-index:0;height:${height}px;overflow:hidden`;
       pre.textContent = lines.join("\n");
       document.body.appendChild(pre);
+      if (side === "right") {
+        // The right margin takes clicks; the pre itself stays inert.
+        const hit = document.createElement("div");
+        hit.className = "motif";
+        hit.setAttribute("aria-hidden", "true");
+        hit.style.cssText = `position:absolute;top:0;left:${x}px;width:${cols * cw}px;height:${height}px;z-index:0`;
+        hit.addEventListener("click", (ev) => drop({ x, lines, cols, cw, lh, fs, startCol: Math.floor((ev.pageX - x) / cw) }));
+        document.body.appendChild(hit);
+      }
     }
+  }
+
+  // A red character falls from the top of the visible window along the
+  // pattern: each row it steps to a neighbouring non-blank cell, keeping its
+  // direction while it can, so it slides down the lines of the motif.
+  function drop({ x, lines, cols, cw, lh, fs, startCol }) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const live = (r, c) => c >= 0 && c < cols && lines[r] && lines[r][c] !== " " && lines[r][c] !== undefined;
+    let row = Math.max(0, Math.floor(window.scrollY / lh) + 1);
+    let col = Math.max(0, Math.min(cols - 1, startCol));
+    for (let d = 0; d < cols && !live(row, col); d++) {
+      if (live(row, col - d)) { col -= d; break; }
+      if (live(row, col + d)) { col += d; break; }
+    }
+    let dir = Math.random() < 0.5 ? -1 : 1;
+    let slid = 0;
+    const dot = document.createElement("span");
+    dot.className = "motif";
+    dot.setAttribute("aria-hidden", "true");
+    dot.textContent = "●";
+    dot.style.cssText = `position:absolute;font:${fs}px/${lh}px var(--mono);color:var(--accent);pointer-events:none;z-index:1`;
+    document.body.appendChild(dot);
+    const place = (el, r, c) => { el.style.left = `${x + c * cw}px`; el.style.top = `${r * lh}px`; };
+    const step = () => {
+      if (!dot.isConnected || row >= lines.length - 1) return dot.remove();
+      const trail = dot.cloneNode(true);
+      trail.style.transition = "opacity 0.9s linear";
+      trail.style.opacity = "0.5";
+      document.body.appendChild(trail);
+      requestAnimationFrame(() => { trail.style.opacity = "0"; });
+      setTimeout(() => trail.remove(), 1000);
+      const down = [dir, 0, -dir].filter((d) => live(row + 1, col + d));
+      if (down.length) {
+        // Follow the line down, keeping the current direction if possible.
+        if (down[0] !== 0) dir = down[0];
+        row++;
+        col += down[0];
+      } else {
+        // Dead end: slide along this row (a triangle's base) to where a line continues.
+        const along = [dir, -dir].find((d) => live(row, col + d) || live(row, col + 2 * d));
+        if (along !== undefined && slid < cols) {
+          dir = along;
+          col += live(row, col + along) ? along : 2 * along;
+          slid++;
+        } else {
+          row++;
+          slid = 0;
+        }
+      }
+      if (down.length) slid = 0;
+      place(dot, row, col);
+      setTimeout(step, 28);
+    };
+    place(dot, row, col);
+    step();
   }
 
   let pending;
