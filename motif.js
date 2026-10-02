@@ -89,6 +89,7 @@
 
   function build() {
     document.querySelectorAll(".motif").forEach((e) => e.remove());
+    walkers.length = 0; // a rebuild drops the walkers with their margins
     const main = document.querySelector("main");
     if (!main) return;
     // Content edges: the widest child of <main>, since the homepage stops at the bio measure.
@@ -126,81 +127,136 @@
         hit.className = "motif";
         hit.setAttribute("aria-hidden", "true");
         hit.style.cssText = `position:absolute;top:0;left:${x}px;width:${cols * cw}px;height:${height}px;z-index:0`;
-        hit.addEventListener("click", (ev) => drop({ x, lines, cols, cw, lh, fs, startCol: Math.floor((ev.pageX - x) / cw), startRow: Math.floor(ev.pageY / lh) }));
+        const panel = { x, lines, cols, cw, lh, fs };
+        hit.addEventListener("click", (ev) => drop(panel, Math.floor(ev.pageY / lh), Math.floor((ev.pageX - x) / cw)));
         document.body.appendChild(hit);
       }
     }
   }
 
-  // A red character wanders along the pattern from where the margin was
-  // clicked: each step it moves to a neighbouring non-blank cell, keeping its
-  // heading when it can and otherwise turning at random. It stays inside the
-  // visible part of the margin, and after a while it fades out. Every walker
-  // draws its own bias for left/right and up/down, so no two move alike.
-  const MAX_WALKERS = 5, LIFETIME = 30000, STEP = 70;
-  let walkers = 0;
+  // Every click on a margin releases a red walker there. A walker is a short
+  // snake that moves along the pattern: each step its head goes to a
+  // neighbouring non-blank cell, keeping its heading when it can and otherwise
+  // turning at random, inside the visible part of the margin. Each walker draws
+  // its own left/right and up/down bias, and its own "temper". When a head runs
+  // into another walker the two either annihilate or merge into one walker as
+  // long as both together; the chance of annihilating is the mean of their
+  // tempers, so it differs from collision to collision.
+  const STEP = 70, LIFETIME = 45000, MAX_WALKERS = 40, MAX_LENGTH = 80;
+  const walkers = [];
+  let ticking = null;
+  const MOVES = [[1, -1], [1, 1], [-1, -1], [-1, 1], [0, -2], [0, 2], [1, 0], [-1, 0], [0, -1], [0, 1]];
 
-  function drop({ x, lines, cols, cw, lh, fs, startCol, startRow }) {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || walkers >= MAX_WALKERS) return;
+  function drop(panel, startRow, startCol) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || walkers.length >= MAX_WALKERS) return;
+    const { lines, cols } = panel;
     const live = (r, c) => c >= 0 && c < cols && r >= 0 && r < lines.length && lines[r][c] !== " " && lines[r][c] !== undefined;
-    const bounds = () => {
-      const top = Math.floor(window.scrollY / lh) + 5; // below the sticky menu
-      return [top, Math.min(lines.length - 1, Math.floor((window.scrollY + window.innerHeight) / lh) - 1)];
-    };
     let row = Math.max(0, startRow), col = Math.max(0, Math.min(cols - 1, startCol));
-    // Start on the nearest non-blank cell.
     search: for (let d = 0; d < 12; d++) {
       for (const [dr, dc] of [[0, -d], [0, d], [-d, 0], [d, 0], [d, d], [-d, -d], [d, -d], [-d, d]]) {
         if (live(row + dr, col + dc)) { row += dr; col += dc; break search; }
       }
     }
-    const pRight = 0.2 + 0.6 * Math.random(), pDown = 0.2 + 0.6 * Math.random();
-    const MOVES = [[1, -1], [1, 1], [-1, -1], [-1, 1], [0, -2], [0, 2], [1, 0], [-1, 0], [0, -1], [0, 1]];
-    const weight = ([dr, dc]) => (dc > 0 ? pRight : dc < 0 ? 1 - pRight : 0.5) * (dr > 0 ? pDown : dr < 0 ? 1 - pDown : 0.5);
-    let heading = MOVES[0];
-    const born = performance.now();
+    walkers.push({
+      panel, live,
+      body: [[row, col]],
+      length: 3 + Math.floor(Math.random() * 6),
+      heading: MOVES[Math.floor(Math.random() * 4)],
+      pRight: 0.2 + 0.6 * Math.random(),
+      pDown: 0.2 + 0.6 * Math.random(),
+      temper: Math.random(),
+      born: performance.now(),
+      els: [],
+    });
+    if (!ticking) ticking = setInterval(tick, STEP);
+  }
 
-    walkers++;
-    const dot = document.createElement("span");
-    dot.className = "motif";
-    dot.setAttribute("aria-hidden", "true");
-    dot.textContent = "●";
-    dot.style.cssText = `position:absolute;font:${fs}px/${lh}px var(--mono);color:var(--accent);pointer-events:none;z-index:1;transition:opacity 1.5s linear`;
-    document.body.appendChild(dot);
-    const place = () => { dot.style.left = `${x + col * cw}px`; dot.style.top = `${row * lh}px`; };
-    const finish = () => { walkers--; dot.style.opacity = "0"; setTimeout(() => dot.remove(), 1600); };
+  function segment(w) {
+    const { fs, lh } = w.panel;
+    const el = document.createElement("span");
+    el.className = "motif";
+    el.setAttribute("aria-hidden", "true");
+    el.textContent = "●";
+    el.style.cssText = `position:absolute;font:${fs}px/${lh}px var(--mono);color:var(--accent);pointer-events:none;z-index:1;transition:opacity 0.6s linear`;
+    document.body.appendChild(el);
+    return el;
+  }
 
-    const step = () => {
-      if (!dot.isConnected) return walkers--;
-      if (performance.now() - born > LIFETIME) return finish();
-      const trail = dot.cloneNode(true);
-      trail.style.opacity = "0.45";
-      trail.style.transition = "opacity 1.2s linear";
-      document.body.appendChild(trail);
-      requestAnimationFrame(() => { trail.style.opacity = "0"; });
-      setTimeout(() => trail.remove(), 1300);
+  function vanish(w) {
+    for (const el of w.els) { el.style.opacity = "0"; setTimeout(() => el.remove(), 700); }
+    w.els = [];
+    w.dead = true;
+  }
 
-      const [top, bottom] = bounds();
-      const inside = (r) => r >= top && r <= bottom;
-      if (!inside(row)) {
-        // The page scrolled away: drift back towards the visible part.
-        row += row < top ? 1 : -1;
-      } else {
-        const options = MOVES.filter(([dr, dc]) => inside(row + dr) && live(row + dr, col + dc));
-        let move;
-        if (options.length === 0) move = null;
-        else if (options.includes(heading) && Math.random() < 0.75) move = heading;
-        else {
-          let total = options.reduce((t, m) => t + weight(m), 0), pick = Math.random() * total;
-          move = options.find((m) => (pick -= weight(m)) <= 0) || options[0];
-        }
-        if (move) { heading = move; row += move[0]; col += move[1]; }
+  function move(w) {
+    const { lh } = w.panel;
+    const top = Math.floor(window.scrollY / lh) + 5; // below the sticky menu
+    const bottom = Math.min(w.panel.lines.length - 1, Math.floor((window.scrollY + window.innerHeight) / lh) - 1);
+    const inside = (r) => r >= top && r <= bottom;
+    let [row, col] = w.body[0];
+    if (!inside(row)) {
+      row += row < top ? 1 : -1; // the page scrolled away: drift back into view
+    } else {
+      const weight = ([dr, dc]) => (dc > 0 ? w.pRight : dc < 0 ? 1 - w.pRight : 0.5) * (dr > 0 ? w.pDown : dr < 0 ? 1 - w.pDown : 0.5);
+      const options = MOVES.filter(([dr, dc]) => inside(row + dr) && w.live(row + dr, col + dc));
+      if (options.length === 0) return;
+      let m = options.includes(w.heading) && Math.random() < 0.75 ? w.heading : null;
+      if (!m) {
+        let pick = Math.random() * options.reduce((t, o) => t + weight(o), 0);
+        m = options.find((o) => (pick -= weight(o)) <= 0) || options[0];
       }
-      place();
-      setTimeout(step, STEP);
-    };
-    place();
-    step();
+      w.heading = m;
+      row += m[0];
+      col += m[1];
+    }
+    w.body.unshift([row, col]);
+    w.body.length = Math.min(w.body.length, w.length);
+  }
+
+  function collide() {
+    for (const a of walkers) {
+      if (a.dead) continue;
+      const [hr, hc] = a.body[0];
+      for (const b of walkers) {
+        if (b === a || b.dead || b.panel !== a.panel) continue;
+        if (!b.body.some(([r, c]) => r === hr && c === hc)) continue;
+        if (Math.random() < (a.temper + b.temper) / 2) {
+          vanish(a);
+          vanish(b);
+        } else {
+          const [big, small] = a.length >= b.length ? [a, b] : [b, a];
+          big.length = Math.min(MAX_LENGTH, a.length + b.length);
+          big.born = performance.now();
+          vanish(small);
+        }
+        break;
+      }
+    }
+  }
+
+  function draw(w) {
+    const { x, cw, lh } = w.panel;
+    while (w.els.length < w.body.length) w.els.push(segment(w));
+    while (w.els.length > w.body.length) w.els.pop().remove();
+    w.body.forEach(([r, c], i) => {
+      const el = w.els[i];
+      el.style.left = `${x + c * cw}px`;
+      el.style.top = `${r * lh}px`;
+      el.style.opacity = String(1 - (0.7 * i) / Math.max(1, w.body.length));
+    });
+  }
+
+  function tick() {
+    const now = performance.now();
+    for (const w of walkers) {
+      if (w.dead) continue;
+      if (now - w.born > LIFETIME) { vanish(w); continue; }
+      move(w);
+    }
+    collide();
+    for (let i = walkers.length - 1; i >= 0; i--) if (walkers[i].dead) walkers.splice(i, 1);
+    walkers.forEach(draw);
+    if (walkers.length === 0) { clearInterval(ticking); ticking = null; }
   }
 
   let pending;
