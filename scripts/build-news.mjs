@@ -119,7 +119,6 @@ function archivePage(entries, lang) {
 ${list(entries, lang, "      ")}
     </section>
     <footer>
-      <p>© Taylan Şengül</p>
       <p><a href="mailto:taylan.sengul@marmara.edu.tr">taylan.sengul@marmara.edu.tr</a> · ${s.location}</p>
     </footer>
   </main>

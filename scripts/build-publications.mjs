@@ -277,7 +277,6 @@ ${preprints.map(preprintMarkup).join("\n")}
 ${publications.map(publicationMarkup).join("\n")}
     </ol>
     <footer>
-      <p>© Taylan Şengül</p>
       <p><a href="mailto:taylan.sengul@marmara.edu.tr">taylan.sengul@marmara.edu.tr</a> · ${strings.footerLocation}</p>
     </footer>
   </main>
