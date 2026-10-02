@@ -129,6 +129,7 @@ ${list(entries, lang, "      ")}
       <p><a href="mailto:taylan.sengul@marmara.edu.tr">taylan.sengul@marmara.edu.tr</a> · ${s.location}</p>
     </footer>
   </main>
+  <script src="motif.js" defer></script>
 </body>
 </html>
 `;

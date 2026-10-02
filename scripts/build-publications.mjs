@@ -279,6 +279,7 @@ ${publications.map(publicationMarkup).join("\n")}
       <p><a href="mailto:taylan.sengul@marmara.edu.tr">taylan.sengul@marmara.edu.tr</a> · ${strings.footerLocation}</p>
     </footer>
   </main>
+  <script src="motif.js" defer></script>
 </body>
 </html>
 `;

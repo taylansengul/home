@@ -621,3 +621,9 @@ footer p {
 .archive.weeks .link-row {
   padding: 0.7rem;
 }
+
+@media print {
+  .motif {
+    display: none;
+  }
+}
