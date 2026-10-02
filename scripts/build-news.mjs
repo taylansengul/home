@@ -113,7 +113,6 @@ function archivePage(entries, lang) {
       <li><a href="${s.home}">${s.homeLabel}</a></li>
       <li><a href="${s.publications}">${s.publicationsLabel}</a></li>
       <li><a href="${s.teaching}">${s.teachingLabel}</a></li>
-      <li><a href="files/CV.pdf">CV</a></li>
       <li><a class="language-link" href="${s.other}" hreflang="${s.otherLang}">${s.otherLabel}</a></li>
     </ul>
   </nav>

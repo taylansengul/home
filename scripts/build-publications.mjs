@@ -248,7 +248,6 @@ function renderPage(publications, preprints, language) {
     <ul class="nav-links">
       <li><a href="${isTurkish ? "tr.html" : "index.html"}">${strings.home}</a></li>
       <li><a href="${isTurkish ? "dersler.html" : "teaching.html"}">${strings.teaching}</a></li>
-      <li><a href="files/CV.pdf">${strings.cv}</a></li>
       <li><a class="language-link" href="${strings.languageHref}" hreflang="${isTurkish ? "en" : "tr"}">${strings.languageLabel}</a></li>
     </ul>
   </nav>
