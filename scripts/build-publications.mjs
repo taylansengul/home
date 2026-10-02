@@ -189,6 +189,8 @@ function renderPage(publications, preprints, language) {
         scholar: "Google Scholar profili",
         footerLocation: "İstanbul, Türkiye",
         skip: "İçeriğe geç",
+        research: "Araştırma",
+        researchLines: `        <li><strong>Kapalı formda geçiş sayıları</strong> · 1B tepkime–yayınım denklemlerinde geçiş katsayısının açık formülü.</li>\n        <li><strong>Simetri ve desen seçimi</strong> · dejenere geçişlerde sistemin hangi deseni seçtiği; şu an O(2) simetrisi altında Hopf çatallanması.</li>\n        <li><strong>Akışkanlar</strong> · aynı makinenin termohalin dolaşım, zonal okyanus akışları ve Poiseuille akışına uygulanması.</li>`,
       }
     : {
         lang: "en",
@@ -207,6 +209,8 @@ function renderPage(publications, preprints, language) {
         scholar: "Google Scholar profile",
         footerLocation: "Istanbul, Türkiye",
         skip: "Skip to content",
+        research: "Research",
+        researchLines: `        <li><strong>Transition numbers in closed form</strong> · explicit formulas for the transition coefficient of 1D reaction–diffusion equations.</li>\n        <li><strong>Symmetry and pattern selection</strong> · what degenerate transitions select; currently Hopf bifurcation under O(2) symmetry.</li>\n        <li><strong>Fluids</strong> · the same machinery applied to the thermohaline circulation, zonal ocean flows and Poiseuille flow.</li>`,
       };
 
   return `<!doctype html>
@@ -256,6 +260,12 @@ function renderPage(publications, preprints, language) {
       <h1>${strings.heading}</h1>
       <p class="page-meta"><a href="https://scholar.google.com/citations?user=udE47_gAAAAJ&amp;hl=${isTurkish ? "tr" : "en"}">${strings.scholar}</a></p>
     </header>
+    <section class="research" aria-labelledby="research-heading">
+      <h2 id="research-heading">${strings.research}</h2>
+      <ul class="research-lines">
+${strings.researchLines}
+      </ul>
+    </section>
 ${preprints.length > 0 ? `    <section class="preprints" aria-labelledby="preprints-heading">
       <h2 id="preprints-heading">${strings.preprints}</h2>
       <p class="section-intro">${strings.preprintsIntro}</p>
