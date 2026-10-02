@@ -120,8 +120,8 @@
       pre.style.cssText = `position:absolute;top:0;left:${x}px;width:${cols * cw}px;margin:0;font:${fs}px/${lh}px var(--mono);color:var(--muted);opacity:.28;pointer-events:none;user-select:none;z-index:0;height:${height}px;overflow:hidden`;
       pre.textContent = lines.join("\n");
       document.body.appendChild(pre);
-      if (side === "right") {
-        // The right margin takes clicks; the pre itself stays inert.
+      {
+        // The margin takes clicks; the pre itself stays inert.
         const hit = document.createElement("div");
         hit.className = "motif";
         hit.setAttribute("aria-hidden", "true");
@@ -133,8 +133,9 @@
   }
 
   // A red character falls from the top of the visible window along the
-  // pattern: each row it steps to a neighbouring non-blank cell, keeping its
-  // direction while it can, so it slides down the lines of the motif.
+  // pattern: each row it steps to a neighbouring non-blank cell, so it slides
+  // down the lines of the motif. Every drop draws its own left/right bias, so
+  // no two fall alike.
   function drop({ x, lines, cols, cw, lh, fs, startCol }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const live = (r, c) => c >= 0 && c < cols && lines[r] && lines[r][c] !== " " && lines[r][c] !== undefined;
@@ -144,7 +145,9 @@
       if (live(row, col - d)) { col -= d; break; }
       if (live(row, col + d)) { col += d; break; }
     }
-    let dir = Math.random() < 0.5 ? -1 : 1;
+    const pRight = 0.15 + 0.7 * Math.random();
+    const side = () => (Math.random() < pRight ? 1 : -1);
+    let dir = side();
     let slid = 0;
     const dot = document.createElement("span");
     dot.className = "motif";
@@ -161,14 +164,18 @@
       document.body.appendChild(trail);
       requestAnimationFrame(() => { trail.style.opacity = "0"; });
       setTimeout(() => trail.remove(), 1000);
-      const down = [dir, 0, -dir].filter((d) => live(row + 1, col + d));
+      const down = [-1, 0, 1].filter((d) => live(row + 1, col + d));
       if (down.length) {
-        // Follow the line down, keeping the current direction if possible.
-        if (down[0] !== 0) dir = down[0];
+        // Follow a line down; where it forks, the drop's bias picks the branch.
+        const lr = down.filter((d) => d !== 0);
+        let d = lr.length === 2 ? side() : lr.length === 1 && (down.length === 1 || Math.random() < 0.7) ? lr[0] : 0;
+        if (!down.includes(d)) d = down[0];
+        if (d !== 0) dir = d;
         row++;
-        col += down[0];
+        col += d;
       } else {
         // Dead end: slide along this row (a triangle's base) to where a line continues.
+        if (slid === 0) dir = side();
         const along = [dir, -dir].find((d) => live(row, col + d) || live(row, col + 2 * d));
         if (along !== undefined && slid < cols) {
           dir = along;
