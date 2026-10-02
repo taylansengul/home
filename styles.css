@@ -436,9 +436,12 @@ section {
   border-bottom: 0;
 }
 
+/* Homepage: hero, news and footer all end at the hero-bio edge. */
+.home > * {
+  max-width: 650px;
+}
+
 .news-list {
-  /* Date column + gap + the hero-bio measure, so both read at the same line length. */
-  max-width: calc(6.2rem + 0.9rem + 650px);
   margin: 0;
   padding: 0;
   list-style: none;
