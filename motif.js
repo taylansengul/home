@@ -126,71 +126,80 @@
         hit.className = "motif";
         hit.setAttribute("aria-hidden", "true");
         hit.style.cssText = `position:absolute;top:0;left:${x}px;width:${cols * cw}px;height:${height}px;z-index:0`;
-        hit.addEventListener("click", (ev) => drop({ x, lines, cols, cw, lh, fs, startCol: Math.floor((ev.pageX - x) / cw) }));
+        hit.addEventListener("click", (ev) => drop({ x, lines, cols, cw, lh, fs, startCol: Math.floor((ev.pageX - x) / cw), startRow: Math.floor(ev.pageY / lh) }));
         document.body.appendChild(hit);
       }
     }
   }
 
-  // A red character falls from the top of the visible window along the
-  // pattern: each row it steps to a neighbouring non-blank cell, so it slides
-  // down the lines of the motif. Every drop draws its own left/right bias, so
-  // no two fall alike.
-  function drop({ x, lines, cols, cw, lh, fs, startCol }) {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const live = (r, c) => c >= 0 && c < cols && lines[r] && lines[r][c] !== " " && lines[r][c] !== undefined;
-    let row = Math.max(0, Math.floor(window.scrollY / lh) + 1);
-    let col = Math.max(0, Math.min(cols - 1, startCol));
-    for (let d = 0; d < cols && !live(row, col); d++) {
-      if (live(row, col - d)) { col -= d; break; }
-      if (live(row, col + d)) { col += d; break; }
+  // A red character wanders along the pattern from where the margin was
+  // clicked: each step it moves to a neighbouring non-blank cell, keeping its
+  // heading when it can and otherwise turning at random. It stays inside the
+  // visible part of the margin, and after a while it fades out. Every walker
+  // draws its own bias for left/right and up/down, so no two move alike.
+  const MAX_WALKERS = 5, LIFETIME = 30000, STEP = 70;
+  let walkers = 0;
+
+  function drop({ x, lines, cols, cw, lh, fs, startCol, startRow }) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || walkers >= MAX_WALKERS) return;
+    const live = (r, c) => c >= 0 && c < cols && r >= 0 && r < lines.length && lines[r][c] !== " " && lines[r][c] !== undefined;
+    const bounds = () => {
+      const top = Math.floor(window.scrollY / lh) + 5; // below the sticky menu
+      return [top, Math.min(lines.length - 1, Math.floor((window.scrollY + window.innerHeight) / lh) - 1)];
+    };
+    let row = Math.max(0, startRow), col = Math.max(0, Math.min(cols - 1, startCol));
+    // Start on the nearest non-blank cell.
+    search: for (let d = 0; d < 12; d++) {
+      for (const [dr, dc] of [[0, -d], [0, d], [-d, 0], [d, 0], [d, d], [-d, -d], [d, -d], [-d, d]]) {
+        if (live(row + dr, col + dc)) { row += dr; col += dc; break search; }
+      }
     }
-    const pRight = 0.15 + 0.7 * Math.random();
-    const side = () => (Math.random() < pRight ? 1 : -1);
-    let dir = side();
-    let slid = 0;
+    const pRight = 0.2 + 0.6 * Math.random(), pDown = 0.2 + 0.6 * Math.random();
+    const MOVES = [[1, -1], [1, 1], [-1, -1], [-1, 1], [0, -2], [0, 2], [1, 0], [-1, 0], [0, -1], [0, 1]];
+    const weight = ([dr, dc]) => (dc > 0 ? pRight : dc < 0 ? 1 - pRight : 0.5) * (dr > 0 ? pDown : dr < 0 ? 1 - pDown : 0.5);
+    let heading = MOVES[0];
+    const born = performance.now();
+
+    walkers++;
     const dot = document.createElement("span");
     dot.className = "motif";
     dot.setAttribute("aria-hidden", "true");
     dot.textContent = "●";
-    dot.style.cssText = `position:absolute;font:${fs}px/${lh}px var(--mono);color:var(--accent);pointer-events:none;z-index:1`;
+    dot.style.cssText = `position:absolute;font:${fs}px/${lh}px var(--mono);color:var(--accent);pointer-events:none;z-index:1;transition:opacity 1.5s linear`;
     document.body.appendChild(dot);
-    const place = (el, r, c) => { el.style.left = `${x + c * cw}px`; el.style.top = `${r * lh}px`; };
+    const place = () => { dot.style.left = `${x + col * cw}px`; dot.style.top = `${row * lh}px`; };
+    const finish = () => { walkers--; dot.style.opacity = "0"; setTimeout(() => dot.remove(), 1600); };
+
     const step = () => {
-      if (!dot.isConnected || row >= lines.length - 1) return dot.remove();
+      if (!dot.isConnected) return walkers--;
+      if (performance.now() - born > LIFETIME) return finish();
       const trail = dot.cloneNode(true);
-      trail.style.transition = "opacity 0.9s linear";
-      trail.style.opacity = "0.5";
+      trail.style.opacity = "0.45";
+      trail.style.transition = "opacity 1.2s linear";
       document.body.appendChild(trail);
       requestAnimationFrame(() => { trail.style.opacity = "0"; });
-      setTimeout(() => trail.remove(), 1000);
-      const down = [-1, 0, 1].filter((d) => live(row + 1, col + d));
-      if (down.length) {
-        // Follow a line down; where it forks, the drop's bias picks the branch.
-        const lr = down.filter((d) => d !== 0);
-        let d = lr.length === 2 ? side() : lr.length === 1 && (down.length === 1 || Math.random() < 0.7) ? lr[0] : 0;
-        if (!down.includes(d)) d = down[0];
-        if (d !== 0) dir = d;
-        row++;
-        col += d;
+      setTimeout(() => trail.remove(), 1300);
+
+      const [top, bottom] = bounds();
+      const inside = (r) => r >= top && r <= bottom;
+      if (!inside(row)) {
+        // The page scrolled away: drift back towards the visible part.
+        row += row < top ? 1 : -1;
       } else {
-        // Dead end: slide along this row (a triangle's base) to where a line continues.
-        if (slid === 0) dir = side();
-        const along = [dir, -dir].find((d) => live(row, col + d) || live(row, col + 2 * d));
-        if (along !== undefined && slid < cols) {
-          dir = along;
-          col += live(row, col + along) ? along : 2 * along;
-          slid++;
-        } else {
-          row++;
-          slid = 0;
+        const options = MOVES.filter(([dr, dc]) => inside(row + dr) && live(row + dr, col + dc));
+        let move;
+        if (options.length === 0) move = null;
+        else if (options.includes(heading) && Math.random() < 0.75) move = heading;
+        else {
+          let total = options.reduce((t, m) => t + weight(m), 0), pick = Math.random() * total;
+          move = options.find((m) => (pick -= weight(m)) <= 0) || options[0];
         }
+        if (move) { heading = move; row += move[0]; col += move[1]; }
       }
-      if (down.length) slid = 0;
-      place(dot, row, col);
-      setTimeout(step, 28);
+      place();
+      setTimeout(step, STEP);
     };
-    place(dot, row, col);
+    place();
     step();
   }
 
