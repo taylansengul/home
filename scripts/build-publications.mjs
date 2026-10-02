@@ -229,7 +229,6 @@ function renderPage(publications, preprints, language) {
   <meta property="og:title" content="${escapeHtml(strings.title)}">
   <meta property="og:description" content="${escapeHtml(strings.description)}">
   <meta property="og:url" content="${strings.canonical}">
-  <meta property="og:image" content="https://taylansengul.github.io/home/files/foto.jpeg">
   <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

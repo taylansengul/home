@@ -132,19 +132,7 @@ nav {
 }
 
 .hero {
-  display: grid;
-  grid-template-columns: 170px minmax(0, 1fr);
-  gap: 2.7rem;
-  align-items: start;
   margin-bottom: 4rem;
-}
-
-.hero img {
-  width: 170px;
-  height: 212px;
-  border-radius: 3px;
-  filter: sepia(8%) contrast(1.05);
-  object-fit: cover;
 }
 
 .eyebrow,
@@ -516,16 +504,6 @@ footer p {
     padding-top: 2.5rem;
   }
 
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .hero img {
-    width: 128px;
-    height: 160px;
-  }
-
 }
 
 @media (max-width: 420px) {
@@ -553,10 +531,6 @@ footer p {
     --body-copy: #ded7cf;
     --card-copy: #d0c7be;
     --nav-bg: rgba(28, 26, 24, 0.96);
-  }
-
-  .hero img {
-    filter: sepia(6%) contrast(1.03) brightness(0.9);
   }
 }
 
