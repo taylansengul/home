@@ -19,8 +19,15 @@ const read = (file) => fs.readFileSync(path.join(siteRoot, file), "utf8");
 const write = (file, text) => fs.writeFileSync(path.join(siteRoot, file), text);
 
 const MONTHS = {
-  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-  tr: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  tr: ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
+};
+
+// Every entry carries one of these types; the label sits under the date.
+const TYPES = {
+  preprint: { en: "Preprint", tr: "Önbaskı" },
+  talk: { en: "Talk", tr: "Konuşma" },
+  notes: { en: "Lecture notes", tr: "Ders notu" },
 };
 
 const LANG = {
@@ -66,10 +73,11 @@ function formatDate(iso, lang) {
 }
 
 function list(entries, lang, indent) {
-  const items = entries.map(
-    (e) => `${indent}  <li><time datetime="${e.date}">${formatDate(e.date, lang)}</time> · ${e[lang]}</li>`,
-  );
-  return [`${indent}<ul class="research-lines">`, ...items, `${indent}</ul>`].join("\n");
+  const items = entries.map((e) => {
+    if (!TYPES[e.type]) throw new Error(`unknown news type "${e.type}" on ${e.date}`);
+    return `${indent}  <li><p class="news-meta"><time datetime="${e.date}">${formatDate(e.date, lang)}</time><span class="news-type">${TYPES[e.type][lang]}</span></p><p>${e[lang]}</p></li>`;
+  });
+  return [`${indent}<ul class="news-list">`, ...items, `${indent}</ul>`].join("\n");
 }
 
 function archivePage(entries, lang) {
