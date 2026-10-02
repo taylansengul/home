@@ -399,24 +399,35 @@ section {
 }
 
 .archive {
-  margin-top: 1.25rem;
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  background: var(--card);
+  margin: 0 0 0.65rem;
 }
 
+/* A folded link row: reads like a row label, with a quiet +/− to open it. */
 .archive summary {
-  padding: 0.85rem 1rem;
-  color: var(--accent);
+  display: inline-block;
+  color: var(--muted);
   cursor: pointer;
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
+  font-size: 0.63rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  list-style: none;
 }
 
-.archive[open] summary {
-  border-bottom: 1px solid var(--rule);
+.archive summary::-webkit-details-marker {
+  display: none;
+}
+
+.archive summary::after {
+  content: " +";
+}
+
+.archive[open] summary::after {
+  content: " −";
+}
+
+.archive summary:hover {
+  color: var(--accent);
 }
 
 
@@ -610,16 +621,8 @@ footer p {
   margin-right: 0.5rem;
 }
 
-.archive.weeks {
-  margin: 0.35rem 0 0.65rem;
-}
-
-.archive.weeks summary {
-  padding: 0.55rem 0.7rem;
-}
-
-.archive.weeks .link-row {
-  padding: 0.7rem;
+.archive .link-row {
+  padding-top: 0.35rem;
 }
 
 @media print {
