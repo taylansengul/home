@@ -5,7 +5,7 @@
 // ca (cellular automata, rules 30 | 90), pitchfork (pattern appearing).
 // Only drawn when the margin is wide enough, so phones never see it.
 (function () {
-  const MOTIF = "waves";
+  const MOTIF = "ca";
   const requested = new URLSearchParams(location.search).get("m");
   const mode = requested in generators() ? requested : MOTIF;
   const RAMP = " .·:-=+*";
