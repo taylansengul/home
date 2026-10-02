@@ -245,7 +245,6 @@ function renderPage(publications, preprints, language) {
 <body id="top">
   <a class="skip-link" href="#main-content">${strings.skip}</a>
   <nav aria-label="${isTurkish ? "Ana menü" : "Primary navigation"}">
-    <a class="nav-name" href="${isTurkish ? "tr.html" : "index.html"}">Taylan Şengül</a>
     <ul class="nav-links">
       <li><a href="${isTurkish ? "tr.html" : "index.html"}">${strings.home}</a></li>
       <li><a href="${isTurkish ? "dersler.html" : "teaching.html"}">${strings.teaching}</a></li>

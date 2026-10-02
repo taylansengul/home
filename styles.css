@@ -70,21 +70,13 @@ nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.5rem 1.5rem;
   padding: 0.7rem max(1.25rem, calc((100vw - 940px) / 2));
   border-bottom: 1px solid var(--rule);
   background: var(--nav-bg);
 }
 
-.nav-name {
-  color: var(--accent);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-decoration: none;
-  white-space: nowrap;
-}
 
 .nav-links {
   display: flex;
@@ -550,9 +542,6 @@ footer p {
     gap: 0.8rem;
   }
 
-  .nav-name {
-    width: 100%;
-  }
 
   .publication-list li {
     grid-template-columns: 1fr;

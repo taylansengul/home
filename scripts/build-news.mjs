@@ -109,7 +109,6 @@ function archivePage(entries, lang) {
 <body id="top">
   <a class="skip-link" href="#main-content">${s.skip}</a>
   <nav aria-label="${s.nav}">
-    <a class="nav-name" href="${s.home}">Taylan Şengül</a>
     <ul class="nav-links">
       <li><a href="${s.home}">${s.homeLabel}</a></li>
       <li><a href="${s.publications}">${s.publicationsLabel}</a></li>
