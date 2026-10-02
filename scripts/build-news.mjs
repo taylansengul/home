@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
 // News lives in news.json, one entry per item, newest first after sorting.
-// Rule: the homepage shows the newest HOME_COUNT entries; everything older
-// moves to the archive page (news.html / haberler.html), linked from the
-// bottom of the homepage section. Edit news.json, then run this script.
+// Rule: the homepage shows every entry from the last HOME_MONTHS months, and
+// never fewer than HOME_COUNT entries; everything else moves to the archive
+// page (news.html / haberler.html), linked from the bottom of the homepage
+// section. The cut is taken on the day the script runs, so rerun it now and
+// then even without new entries. Edit news.json, then run this script.
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HOME_COUNT = 5;
+const HOME_MONTHS = 6;
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => fs.readFileSync(path.join(siteRoot, file), "utf8");
@@ -126,8 +129,13 @@ ${list(entries, lang, "      ")}
 }
 
 const news = JSON.parse(read("news.json")).sort((a, b) => b.date.localeCompare(a.date));
-const recent = news.slice(0, HOME_COUNT);
-const older = news.slice(HOME_COUNT);
+const cutoff = new Date();
+cutoff.setMonth(cutoff.getMonth() - HOME_MONTHS);
+const cutoffIso = cutoff.toISOString().slice(0, 10);
+const inWindow = news.filter((e) => e.date >= cutoffIso).length;
+const homeSize = Math.max(HOME_COUNT, inWindow);
+const recent = news.slice(0, homeSize);
+const older = news.slice(homeSize);
 
 const START = "<!-- news:start (scripts/build-news.mjs) -->";
 const END = "<!-- news:end -->";

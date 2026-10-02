@@ -40,8 +40,8 @@ const pages = [
     priority: "0.7",
     alternates: { en: "teaching.html", tr: "dersler.html" },
   },
-  { file: "news.html", loc: "news.html", priority: "0.5", alternates: { en: "news.html", tr: "haberler.html" } },
-  { file: "haberler.html", loc: "haberler.html", priority: "0.5", alternates: { en: "news.html", tr: "haberler.html" } },
+  { file: "news.html", loc: "news.html", priority: "0.5", optional: true, alternates: { en: "news.html", tr: "haberler.html" } },
+  { file: "haberler.html", loc: "haberler.html", priority: "0.5", optional: true, alternates: { en: "news.html", tr: "haberler.html" } },
   { file: "files/bilim_tarihi_2025_I.html", loc: "files/bilim_tarihi_2025_I.html", priority: "0.5" },
   { file: "files/guz_2025_bilim_tarihi_sunum.html", loc: "files/guz_2025_bilim_tarihi_sunum.html", priority: "0.5" },
   { file: "files/bilim_tarihi_2023.html", loc: "files/bilim_tarihi_2023.html", priority: "0.4" },
@@ -90,6 +90,12 @@ function renderUrl(page) {
 
   lines.push("  </url>");
   return lines.join("\n");
+}
+
+// The news archive exists only while some entry is old enough for it
+// (scripts/build-news.mjs), so it drops out of the sitemap when absent.
+for (let k = pages.length - 1; k >= 0; k--) {
+  if (pages[k].optional && !fs.existsSync(path.join(siteRoot, pages[k].file))) pages.splice(k, 1);
 }
 
 const missing = pages.filter((page) => !fs.existsSync(path.join(siteRoot, page.file)));
