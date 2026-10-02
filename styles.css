@@ -180,7 +180,7 @@ nav {
 .button-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
+  gap: 0.4rem 1.4rem;
 }
 
 .button-links a,
@@ -190,21 +190,16 @@ nav {
 }
 
 .button-links a {
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-}
-
-.button-links a {
-  padding: 0.25em 0.72em;
-  border-color: var(--accent);
   color: var(--accent);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   letter-spacing: 0.035em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .button-links a:hover {
-  background: var(--accent);
-  color: var(--on-accent);
+  color: var(--accent-dark);
 }
 
 section {
