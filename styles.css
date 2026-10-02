@@ -81,11 +81,18 @@ nav {
 .nav-links {
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
   gap: 0.5rem 1.15rem;
   align-items: center;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* The language switch sits alone on the left, the page links on the right. */
+.nav-links li:has(.language-link) {
+  order: -1;
+  margin-right: auto;
 }
 
 .nav-links a {
