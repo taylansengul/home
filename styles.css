@@ -646,6 +646,22 @@ footer p {
   color: var(--body-copy);
 }
 
+.post .fnref {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
+.post .footnotes {
+  margin-top: 2.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.post .footnotes p {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 .post-back {
   margin-top: 2.5rem;
   font-family: var(--mono);
