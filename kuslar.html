@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Halka tel ve gitar teli üzerinde kuşlar: gezen ve duran dalga.">
+  <meta name="robots" content="noindex">
+  <title>Teldeki Kuşlar</title>
+  <link rel="canonical" href="https://taylansengul.github.io/home/kuslar.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root { --kus-friend: #c08a2b; }
+    @media (prefers-color-scheme: dark) { :root { --kus-friend: #e0b25a; } }
+    .stages { display: grid; grid-template-columns: 1fr 1.35fr; gap: 16px; margin: 1.5rem 0; cursor: pointer; }
+    @media (max-width: 700px) { .stages { grid-template-columns: 1fr; } }
+    .stage { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .stages canvas { display: block; width: 100%; }
+    #ring { aspect-ratio: 1 / 0.85; }
+    #str { aspect-ratio: 1.6 / 1; }
+    .trace { height: 60px; }
+  </style>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main-content">İçeriğe geç</a>
+  <nav aria-label="Ana gezinme">
+    <ul class="nav-links">
+      <li><a href="tr.html">Ana sayfa</a></li>
+      <li><a href="yayinlar.html">Yayınlar</a></li>
+      <li><a href="yazilar.html">Yazılar</a></li>
+      <li><a href="muzik.html">Müzik</a></li>
+    </ul>
+  </nav>
+  <main class="container" id="main-content">
+    <header class="page-header">
+      <p class="eyebrow"><time datetime="2026-11-13">13 Kasım 2026</time> · Animasyon</p>
+      <h1>Teldeki Kuşlar</h1>
+    </header>
+    <div class="stages" id="stages" role="img" aria-label="Halka tel ve gitar teli üzerinde kuşlar; dalga gezen ve duran hâl arasında gidip geliyor. Tıklayınca hâl değişir.">
+      <div class="stage"><canvas id="ring"></canvas><canvas id="ringTrace" class="trace"></canvas></div>
+      <div class="stage"><canvas id="str"></canvas><canvas id="strTrace" class="trace"></canvas></div>
+    </div>
+    <script>
+    (() => {
+      const $ = id => document.getElementById(id);
+      const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+      let C = {};
+      const readColors = () => { C = { wire: css('--muted'), bird: css('--ink'), you: css('--accent'), friend: css('--kus-friend'), line: css('--rule'), eye: css('--bg') }; };
+      readColors();
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors);
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // m: 0 gezen, 1 duran; hedefe yumuşak geçer, CYCLE saniyede bir kendiliğinden değişir
+      const S = { m: 1, target: 1, n: 3, speed: 0.6, t: 0 };
+      const CYCLE = 12;
+      let sinceSwitch = 0;
+
+      const wave = (phi, t) => { const w = 2 * Math.PI * t; return (Math.sin(phi - w) + S.m * Math.sin(phi + w)) / (1 + S.m); };
+
+      function fit(cv) {
+        const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
+        const W = Math.max(1, Math.round(r.width * d)), H = Math.max(1, Math.round(r.height * d));
+        if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+        const ctx = cv.getContext('2d'); ctx.setTransform(d, 0, 0, d, 0, 0);
+        return { ctx, w: r.width, h: r.height };
+      }
+
+      function bird(ctx, x, y, ang, s, fill) {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+        ctx.strokeStyle = fill; ctx.lineWidth = Math.max(1, s * 0.09); ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(-0.15 * s, 0); ctx.lineTo(-0.08 * s, -0.4 * s); ctx.moveTo(0.15 * s, 0); ctx.lineTo(0.1 * s, -0.4 * s); ctx.stroke();
+        ctx.fillStyle = fill;
+        ctx.beginPath(); ctx.ellipse(0, -0.72 * s, 0.55 * s, 0.38 * s, -0.15, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-0.45 * s, -0.68 * s); ctx.lineTo(-1.05 * s, -0.45 * s); ctx.lineTo(-0.98 * s, -0.8 * s); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.arc(0.45 * s, -1.1 * s, 0.26 * s, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(0.66 * s, -1.16 * s); ctx.lineTo(0.95 * s, -1.08 * s); ctx.lineTo(0.66 * s, -1.0 * s); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = C.eye; ctx.beginPath(); ctx.arc(0.52 * s, -1.15 * s, 0.06 * s, 0, 7); ctx.fill();
+        ctx.restore();
+      }
+
+      const NR = 28, YOU_R = 0, NS = 17, YOU_S = 5;
+      const hist = { ring: [], str: [] };
+
+      function drawRing(t) {
+        const { ctx, w, h } = fit($('ring'));
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.33, A = R * 0.16;
+        const P = th => { const r = R + A * wave(S.n * th, t); return [cx + r * Math.cos(th), cy + r * Math.sin(th)]; };
+        ctx.setLineDash([3, 5]); ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = C.wire; ctx.lineWidth = 2.2; ctx.beginPath();
+        for (let i = 0; i <= 360; i++) { const [x, y] = P(i / 360 * 2 * Math.PI); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+        ctx.stroke();
+        const s = Math.max(6, R * 0.075);
+        for (let i = 0; i < NR; i++) {
+          const th = i / NR * 2 * Math.PI, e = 1e-3;
+          const [x, y] = P(th), [x1, y1] = P(th + e), [x0, y0] = P(th - e);
+          const col = i === YOU_R ? C.you : (i === 1 || i === NR - 1) ? C.friend : C.bird;
+          bird(ctx, x, y, Math.atan2(y1 - y0, x1 - x0), i === YOU_R ? s * 1.15 : s, col);
+        }
+        const u = k => wave(S.n * (k / NR * 2 * Math.PI), t);
+        return [u(YOU_R), u(NR - 1), u(1)];
+      }
+
+      function drawStr(t) {
+        const { ctx, w, h } = fit($('str'));
+        ctx.clearRect(0, 0, w, h);
+        const pinned = S.m >= 0.995;
+        const x0 = w * 0.07, x1 = w * 0.93, L = x1 - x0, cy = h * 0.55, A = h * 0.22;
+        const k = S.n * Math.PI / L;
+        const Y = x => cy - A * wave(k * (x - x0), t);
+        ctx.setLineDash([3, 5]); ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pinned ? x0 : 0, cy); ctx.lineTo(pinned ? x1 : w, cy); ctx.stroke(); ctx.setLineDash([]);
+        ctx.lineWidth = 2.2;
+        if (pinned) {
+          ctx.strokeStyle = C.wire; ctx.beginPath();
+          for (let i = 0; i <= 300; i++) { const x = x0 + L * i / 300; i ? ctx.lineTo(x, Y(x)) : ctx.moveTo(x, Y(x)); }
+          ctx.stroke();
+          ctx.fillStyle = C.wire; [x0, x1].forEach(x => ctx.fillRect(x - 4, cy - 14, 8, 28));
+        } else {
+          const g = ctx.createLinearGradient(0, 0, w, 0);
+          g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.07, C.wire); g.addColorStop(0.93, C.wire); g.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.strokeStyle = g; ctx.beginPath();
+          for (let i = 0; i <= 400; i++) { const x = w * i / 400; i ? ctx.lineTo(x, Y(x)) : ctx.moveTo(x, Y(x)); }
+          ctx.stroke();
+        }
+        const s = Math.max(6, Math.min(w, h) * 0.038);
+        for (let i = 0; i < NS; i++) {
+          const x = x0 + L * (i + 0.5) / NS, e = 0.5;
+          const col = i === YOU_S ? C.you : Math.abs(i - YOU_S) === 1 ? C.friend : C.bird;
+          bird(ctx, x, Y(x), Math.atan2(Y(x + e) - Y(x - e), 2 * e), i === YOU_S ? s * 1.15 : s, col);
+        }
+        const u = i => wave(k * (L * (i + 0.5) / NS), t);
+        return [u(YOU_S), u(YOU_S - 1), u(YOU_S + 1)];
+      }
+
+      function drawTrace(id, buf) {
+        const { ctx, w, h } = fit($(id));
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.stroke();
+        if (buf.length < 2) return;
+        const span = 4, tEnd = buf[buf.length - 1][0];
+        const X = tt => w - (tEnd - tt) / span * w, Yv = v => h / 2 - v * (h / 2 - 6);
+        [[1, C.friend, 1.5], [2, C.friend, 1.5], [0, C.you, 2.4]].forEach(([j, col, lw]) => {
+          ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.globalAlpha = j ? 0.85 : 1; ctx.beginPath();
+          buf.forEach((b, i) => { const x = X(b[0]), y = Yv(b[1][j]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+          ctx.stroke();
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      const toggle = () => { S.target = S.target ? 0 : 1; sinceSwitch = 0; };
+      $('stages').addEventListener('click', toggle);
+
+      let wall = performance.now(), clock = 0;
+      function frame(now) {
+        const dt = Math.min(0.05, (now - wall) / 1000); wall = now;
+        clock += dt; S.t += dt * S.speed; sinceSwitch += dt;
+        if (sinceSwitch > CYCLE) toggle();
+        S.m += (S.target - S.m) * Math.min(1, dt * 1.5);
+        if (Math.abs(S.target - S.m) < 0.002) S.m = S.target;
+        const r = drawRing(S.t), q = drawStr(S.t);
+        hist.ring.push([clock, r]); hist.str.push([clock, q]);
+        while (clock - hist.ring[0][0] > 4.2) hist.ring.shift();
+        while (clock - hist.str[0][0] > 4.2) hist.str.shift();
+        drawTrace('ringTrace', hist.ring); drawTrace('strTrace', hist.str);
+        if (!reduced) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+    </script>
+    <p class="post-back"><a href="yazilar.html">← Yazılar</a></p>
+  </main>
+</body>
+</html>

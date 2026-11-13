@@ -28,6 +28,7 @@ const TYPES = {
   preprint: { en: "Preprint", tr: "Önbaskı" },
   talk: { en: "Talk", tr: "Konuşma" },
   notes: { en: "Lecture notes", tr: "Ders notu" },
+  animation: { en: "Animation", tr: "Animasyon" },
 };
 
 const LANG = {
