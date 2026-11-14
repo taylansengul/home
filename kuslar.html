@@ -26,6 +26,8 @@
     .mode button[aria-pressed="true"] { color: var(--accent); text-decoration: underline; text-underline-offset: 0.3em; }
     .mode button:hover { color: var(--ink); }
     .mode { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; }
+    .mode .bc { margin-left: 1.6rem; transition: opacity 0.4s; }
+    .mode .bc.dim { opacity: 0.35; }
     .mode .speed { display: inline-flex; align-items: center; gap: 0.6rem; margin-left: auto; }
     .mode input[type=range] { width: 9rem; accent-color: var(--accent); }
     .trace-note { margin: 0 0 1.5rem; font-size: 0.98rem; color: var(--muted); max-width: 46rem; }
@@ -46,7 +48,7 @@
       <p class="eyebrow"><time datetime="2026-11-13">13 Kasım 2026</time> · Animasyon</p>
       <h1>Teldeki Kuşlar</h1>
     </header>
-    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><label class="speed">Hız <input type="range" id="speed" min="0.1" max="1.5" step="0.05" value="0.6"></label></p>
+    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><span class="bc" id="bc" lang="en" role="group" aria-label="Gitar telinin uçları"><button type="button" id="bD" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" aria-pressed="false">Neumann</button></span><label class="speed">Hız <input type="range" id="speed" min="0.1" max="1.5" step="0.05" value="0.6"></label></p>
     <div class="stages" id="stages" role="img" aria-label="Halka tel ve gitar teli üzerinde kuşlar; dalga gezen ve duran hâl arasında gidip geliyor. Tıklayınca hâl değişir.">
       <div class="stage"><canvas id="ring"></canvas><canvas id="ringTrace" class="trace"></canvas></div>
       <div class="stage"><canvas id="str"></canvas><canvas id="strTrace" class="trace"></canvas></div>
@@ -63,7 +65,7 @@
 
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       // m: 0 gezen, 1 duran; hedefe yumuşak geçer, CYCLE saniyede bir kendiliğinden değişir
-      const S = { m: 1, target: 1, n: 3, speed: 0.6, t: 0 };
+      const S = { m: 1, target: 1, n: 3, speed: 0.6, t: 0, neu: 0 };
       const CYCLE = 12;
       let sinceSwitch = 0;
 
@@ -120,7 +122,8 @@
         const pinned = S.m >= 0.995;
         const x0 = w * 0.07, x1 = w * 0.93, L = x1 - x0, cy = h * 0.55, A = h * 0.22;
         const k = S.n * Math.PI / L;
-        const Y = x => cy - A * wave(k * (x - x0), t);
+        const ph = S.neu ? Math.PI / 2 : 0;
+        const Y = x => cy - A * wave(k * (x - x0) + ph, t);
         ctx.setLineDash([3, 5]); ctx.strokeStyle = C.line; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(pinned ? x0 : 0, cy); ctx.lineTo(pinned ? x1 : w, cy); ctx.stroke(); ctx.setLineDash([]);
         ctx.lineWidth = 2.2;
@@ -128,7 +131,10 @@
           ctx.strokeStyle = C.wire; ctx.beginPath();
           for (let i = 0; i <= 300; i++) { const x = x0 + L * i / 300; i ? ctx.lineTo(x, Y(x)) : ctx.moveTo(x, Y(x)); }
           ctx.stroke();
-          ctx.fillStyle = C.wire; [x0, x1].forEach(x => ctx.fillRect(x - 4, cy - 14, 8, 28));
+          if (S.neu) {
+            ctx.lineWidth = 1.5; [x0, x1].forEach(x => { ctx.beginPath(); ctx.moveTo(x, cy - A * 1.35); ctx.lineTo(x, cy + A * 1.35); ctx.stroke(); });
+            ctx.lineWidth = 2; ctx.fillStyle = C.eye; [x0, x1].forEach(x => { ctx.beginPath(); ctx.arc(x, Y(x), 5, 0, 7); ctx.fill(); ctx.stroke(); });
+          } else { ctx.fillStyle = C.wire; [x0, x1].forEach(x => ctx.fillRect(x - 4, cy - 14, 8, 28)); }
         } else {
           const g = ctx.createLinearGradient(0, 0, w, 0);
           g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.07, C.wire); g.addColorStop(0.93, C.wire); g.addColorStop(1, 'rgba(0,0,0,0)');
@@ -142,7 +148,7 @@
           const col = i === YOU_S ? C.you : Math.abs(i - YOU_S) === 1 ? C.friend : C.bird;
           bird(ctx, x, Y(x), Math.atan2(Y(x + e) - Y(x - e), 2 * e), i === YOU_S ? s * 1.15 : s, col);
         }
-        const u = i => wave(k * (L * (i + 0.5) / NS), t);
+        const u = i => wave(k * (L * (i + 0.5) / NS) + ph, t);
         return [u(YOU_S), u(YOU_S - 1), u(YOU_S + 1)];
       }
 
@@ -166,12 +172,15 @@
         'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği. Gezen dalgada üçü de aynı salınımı yapar, her biri komşusundan biraz geç.',
         'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği.'
       ];
-      const label = () => { $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
+      const label = () => { $('bc').classList.toggle('dim', !S.target); $('bD').setAttribute('aria-pressed', S.neu ? 'false' : 'true'); $('bN').setAttribute('aria-pressed', S.neu ? 'true' : 'false'); $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
       const setMode = v => { S.target = v; sinceSwitch = 0; label(); if (reduced) { S.m = v; requestAnimationFrame(frame); } };
       const toggle = () => setMode(S.target ? 0 : 1);
       $('stages').addEventListener('click', () => { auto = false; toggle(); });
       $('mGezen').addEventListener('click', () => { auto = false; setMode(0); });
       $('mDuran').addEventListener('click', () => { auto = false; setMode(1); });
+      const setBC = v => { S.neu = v; label(); if (reduced) requestAnimationFrame(frame); };
+      $('bD').addEventListener('click', () => { auto = false; setBC(0); if (!S.target) setMode(1); });
+      $('bN').addEventListener('click', () => { auto = false; setBC(1); if (!S.target) setMode(1); });
       $('speed').addEventListener('input', e => { S.speed = +e.target.value; });
 
       label();
