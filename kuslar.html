@@ -31,7 +31,7 @@
     .box button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 0.2rem 0; cursor: pointer; }
     .box button[aria-pressed="true"] { color: var(--accent, #8b3a1e); text-decoration: underline; text-underline-offset: 0.3em; }
     .box button:hover { color: var(--ink, #1a1a1a); }
-    .bc button.dim { opacity: 0.35; transition: opacity 0.4s; }
+    .bc button.dim { opacity: 0.45; text-decoration: line-through; transition: opacity 0.4s; } /* gezen dalgada uçları bağlı tel yok */
     .params { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 0.4rem 1.8rem; }
     @media (max-width: 640px) { .params { grid-template-columns: 1fr; } }
     .params label { display: grid; grid-template-columns: 3.4em minmax(4rem, 1fr) 2.6em; align-items: center; gap: 0.6rem; }
@@ -58,7 +58,7 @@
       <h1>Teldeki Kuşlar</h1>
     </header>
     <div class="controls"><fieldset class="box"><legend>Dalga türü</legend><button type="button" id="mGezen" aria-pressed="false">Gezen <span lang="en">(traveling)</span></button> · <button type="button" id="mDuran" aria-pressed="true">Duran <span lang="en">(standing)</span></button></fieldset><fieldset class="box bc" id="bc"><legend>Sınır koşulu</legend><button type="button" id="bP" aria-pressed="false">Periyodik</button> · <button type="button" id="bS" aria-pressed="false">Sonsuz</button> · <button type="button" id="bD" lang="en" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" lang="en" aria-pressed="false">Neumann</button></fieldset>
-      <fieldset class="box params"><legend>Parametreler</legend><label><span><i style="text-transform:none">n</i></span><input type="range" id="pn" min="1" max="6" step="1" value="3"><output id="on">3</output></label><label><span>Hız <i style="text-transform:none">c</i></span><input type="range" id="pc" min="0.2" max="2" step="0.05" value="1"><output id="oc">1.00</output></label><label><span>Kuş</span><input type="range" id="pN" min="4" max="40" step="1" value="20"><output id="oN">20</output></label><span class="omega" id="omega"></span></fieldset></div>
+      <fieldset class="box params"><legend>Parametreler</legend><label><span><i style="text-transform:none">n</i></span><input type="range" id="pn" min="1" max="6" step="1" value="3"><output id="on">3</output></label><label><span>Hız <i style="text-transform:none">c</i></span><input type="range" id="pc" min="-2" max="2" step="0.05" value="1"><output id="oc">1.00</output></label><label><span>Kuş</span><input type="range" id="pN" min="4" max="40" step="1" value="20"><output id="oN">20</output></label><span class="omega" id="omega"></span></fieldset></div>
     <p class="trace-note" id="note"></p>
     <div class="stages" id="stages" role="img" aria-label="Halka tel ya da gitar teli üzerinde kuşlar; dalga gezen ya da duran. Bir kuşa tıklayınca seçilir ya da bırakılır.">
       <div class="stage" id="stRing" hidden><canvas id="ring"></canvas><p class="formula" id="fRing"></p><canvas id="ringTrace" class="trace"></canvas></div>
@@ -209,13 +209,14 @@
         'Gezen dalga yalnız periyodik telde ve sonsuz telde olur. Uçları bağlı telde (Dirichlet, Neumann) dalga uçtan yansır, geriye duran dalga kalır. Alttaki çizgiler son dört saniyede renkli kuşların yüksekliği. Bir kuşa tıklayınca seçilir ya da bırakılır. Gezen dalgada hepsi aynı salınımı yapar, her biri komşusundan biraz geç.',
         'Gezen dalga yalnız periyodik telde ve sonsuz telde olur. Uçları bağlı telde (Dirichlet, Neumann) dalga uçtan yansır, geriye duran dalga kalır. Alttaki çizgiler son dört saniyede renkli kuşların yüksekliği. Bir kuşa tıklayınca seçilir ya da bırakılır.'
       ];
+      const num = v => (Math.abs(v) < 0.005 ? 0 : v).toFixed(2).replace('-', '−');
       const nn = () => S.n === 1 ? '' : S.n;
       const formulas = () => {
         const n = nn(), f = isNeu() ? 'cos' : 'sin';
         const dom = S.bc === 'S' ? ', <i>x</i> ∈ ℝ' : ', 0 ≤ <i>x</i> ≤ π';
         $('fRing').innerHTML = S.target ? `<i>u</i> = sin ${n}<i>θ</i> · cos <i>ωt</i>` : `<i>u</i> = sin(${n}<i>θ</i> − <i>ωt</i>)`;
         $('fStr').innerHTML = (S.target ? `<i>u</i> = ${f} ${n}<i>x</i> · cos <i>ωt</i>` : `<i>u</i> = ${f}(${n}<i>x</i> − <i>ωt</i>)`) + dom;
-        $('omega').innerHTML = `<i>ω</i> = <i>nc</i> = ${omega().toFixed(2)}`;
+        $('omega').innerHTML = `<i>ω</i> = <i>nc</i> = ${num(omega())}`;
       };
       const label = () => { formulas(); $('stRing').hidden = !isRing(); $('stStr').hidden = isRing(); ['bD', 'bN'].forEach(b => $(b).classList.toggle('dim', !S.target)); [['bP', 'P'], ['bS', 'S'], ['bD', 'D'], ['bN', 'N']].forEach(([b, v]) => $(b).setAttribute('aria-pressed', S.bc === v ? 'true' : 'false')); $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
       const setMode = v => { S.target = v; label(); if (reduced) { S.m = v; requestAnimationFrame(frame); } };
@@ -249,7 +250,8 @@
         if (reduced) requestAnimationFrame(frame);
       });
       param('pn', 'on', 'n', v => v);
-      param('pc', 'oc', 'c', v => v.toFixed(2));
+      // c < 0: gezen dalga ters yöne gider (ω = nc < 0); duran dalga cos ωt olduğu için aynı görünür
+      param('pc', 'oc', 'c', v => num(v));
       param('pN', 'oN', 'N', v => v);
       $('pN').addEventListener('input', () => { ['ring', 'str'].forEach(w => { sel[w] = sel[w].filter(p => p[0] < S.N); }); });
 
