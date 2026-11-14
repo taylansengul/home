@@ -25,6 +25,9 @@
     .mode button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 0.2rem 0; cursor: pointer; }
     .mode button[aria-pressed="true"] { color: var(--accent); text-decoration: underline; text-underline-offset: 0.3em; }
     .mode button:hover { color: var(--ink); }
+    .mode { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; }
+    .mode .speed { display: inline-flex; align-items: center; gap: 0.6rem; margin-left: auto; }
+    .mode input[type=range] { width: 9rem; accent-color: var(--accent); }
     .trace-note { margin: 0 0 1.5rem; font-size: 0.98rem; color: var(--muted); max-width: 46rem; }
     .trace-note .you { color: var(--accent); } .trace-note .fr { color: var(--kus-friend); }
   </style>
@@ -43,7 +46,7 @@
       <p class="eyebrow"><time datetime="2026-11-13">13 Kasım 2026</time> · Animasyon</p>
       <h1>Teldeki Kuşlar</h1>
     </header>
-    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button></p>
+    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><label class="speed">Hız <input type="range" id="speed" min="0.1" max="1.5" step="0.05" value="0.6"></label></p>
     <div class="stages" id="stages" role="img" aria-label="Halka tel ve gitar teli üzerinde kuşlar; dalga gezen ve duran hâl arasında gidip geliyor. Tıklayınca hâl değişir.">
       <div class="stage"><canvas id="ring"></canvas><canvas id="ringTrace" class="trace"></canvas></div>
       <div class="stage"><canvas id="str"></canvas><canvas id="strTrace" class="trace"></canvas></div>
@@ -161,7 +164,7 @@
       let auto = true;
       const NOTE = [
         'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği. Gezen dalgada üçü de aynı salınımı yapar, her biri komşusundan biraz geç.',
-        'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği. Duran dalgada kırmızı kuş düğüme yakın oturur ve neredeyse kıpırdamaz. Sarı komşuları birbirinin tersine iner kalkar.'
+        'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği.'
       ];
       const label = () => { $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
       const setMode = v => { S.target = v; sinceSwitch = 0; label(); if (reduced) { S.m = v; requestAnimationFrame(frame); } };
@@ -169,6 +172,7 @@
       $('stages').addEventListener('click', () => { auto = false; toggle(); });
       $('mGezen').addEventListener('click', () => { auto = false; setMode(0); });
       $('mDuran').addEventListener('click', () => { auto = false; setMode(1); });
+      $('speed').addEventListener('input', e => { S.speed = +e.target.value; });
 
       label();
       let wall = performance.now(), clock = 0;
