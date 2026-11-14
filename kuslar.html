@@ -12,8 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    :root { --kus-friend: #c08a2b; }
-    @media (prefers-color-scheme: dark) { :root { --kus-friend: #e0b25a; } }
+    :root { --kus-friend: #c08a2b; --kus-blue: #3b6ea5; }
+    @media (prefers-color-scheme: dark) { :root { --kus-friend: #e0b25a; --kus-blue: #7eaad9; } }
     .stages { display: grid; grid-template-columns: 1fr 1.35fr; gap: 16px; margin: 1.5rem 0; cursor: pointer; }
     @media (max-width: 700px) { .stages { grid-template-columns: 1fr; } }
     .stage { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
@@ -31,7 +31,8 @@
     .mode .speed { display: inline-flex; align-items: center; gap: 0.6rem; margin-left: auto; }
     .mode input[type=range] { width: 9rem; accent-color: var(--accent); }
     .trace-note { margin: 0 0 1.5rem; font-size: 0.98rem; color: var(--muted); max-width: 46rem; }
-    .trace-note .you { color: var(--accent); } .trace-note .fr { color: var(--kus-friend); }
+    .trace-note .you { color: var(--accent); } .trace-note .fr { color: var(--kus-friend); } .trace-note .bl { color: var(--kus-blue); }
+    .bc-name { margin: 0; text-align: center; font-family: var(--mono); font-weight: var(--mono-weight); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
   </style>
 </head>
 <body id="top">
@@ -50,8 +51,8 @@
     </header>
     <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><span class="bc" id="bc" lang="en" role="group" aria-label="Gitar telinin uçları"><button type="button" id="bD" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" aria-pressed="false">Neumann</button></span><label class="speed">Hız <input type="range" id="speed" min="0.1" max="1.5" step="0.05" value="0.6"></label></p>
     <div class="stages" id="stages" role="img" aria-label="Halka tel ve gitar teli üzerinde kuşlar; dalga gezen ve duran hâl arasında gidip geliyor. Tıklayınca hâl değişir.">
-      <div class="stage"><canvas id="ring"></canvas><canvas id="ringTrace" class="trace"></canvas></div>
-      <div class="stage"><canvas id="str"></canvas><canvas id="strTrace" class="trace"></canvas></div>
+      <div class="stage"><canvas id="ring"></canvas><p class="bc-name">Periyodik</p><canvas id="ringTrace" class="trace"></canvas></div>
+      <div class="stage"><canvas id="str"></canvas><p class="bc-name" id="strName" lang="en">Dirichlet</p><canvas id="strTrace" class="trace"></canvas></div>
     </div>
     <p class="trace-note" id="note"></p>
     <script>
@@ -59,7 +60,7 @@
       const $ = id => document.getElementById(id);
       const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
       let C = {};
-      const readColors = () => { C = { wire: css('--muted'), bird: css('--ink'), you: css('--accent'), friend: css('--kus-friend'), line: css('--rule'), eye: css('--bg') }; };
+      const readColors = () => { C = { wire: css('--muted'), bird: css('--ink'), you: css('--accent'), friend: css('--kus-friend'), blue: css('--kus-blue'), line: css('--rule'), eye: css('--bg') }; };
       readColors();
       matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors);
 
@@ -109,7 +110,7 @@
         for (let i = 0; i < NR; i++) {
           const th = i / NR * 2 * Math.PI, e = 1e-3;
           const [x, y] = P(th), [x1, y1] = P(th + e), [x0, y0] = P(th - e);
-          const col = i === YOU_R ? C.you : (i === 1 || i === NR - 1) ? C.friend : C.bird;
+          const col = i === YOU_R ? C.you : i === 1 ? C.blue : i === NR - 1 ? C.friend : C.bird;
           bird(ctx, x, y, Math.atan2(y1 - y0, x1 - x0), i === YOU_R ? s * 1.15 : s, col);
         }
         const u = k => wave(S.n * (k / NR * 2 * Math.PI), t);
@@ -145,7 +146,7 @@
         const s = Math.max(6, Math.min(w, h) * 0.038);
         for (let i = 0; i < NS; i++) {
           const x = x0 + L * (i + 0.5) / NS, e = 0.5;
-          const col = i === YOU_S ? C.you : Math.abs(i - YOU_S) === 1 ? C.friend : C.bird;
+          const col = i === YOU_S ? C.you : i === YOU_S + 1 ? C.blue : i === YOU_S - 1 ? C.friend : C.bird;
           bird(ctx, x, Y(x), Math.atan2(Y(x + e) - Y(x - e), 2 * e), i === YOU_S ? s * 1.15 : s, col);
         }
         const u = i => wave(k * (L * (i + 0.5) / NS) + ph, t);
@@ -159,7 +160,7 @@
         if (buf.length < 2) return;
         const span = 4, tEnd = buf[buf.length - 1][0];
         const X = tt => w - (tEnd - tt) / span * w, Yv = v => h / 2 - v * (h / 2 - 6);
-        [[1, C.friend, 1.5], [2, C.friend, 1.5], [0, C.you, 2.4]].forEach(([j, col, lw]) => {
+        [[1, C.friend, 1.5], [2, C.blue, 1.5], [0, C.you, 2.4]].forEach(([j, col, lw]) => {
           ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.globalAlpha = j ? 0.85 : 1; ctx.beginPath();
           buf.forEach((b, i) => { const x = X(b[0]), y = Yv(b[1][j]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
           ctx.stroke();
@@ -169,10 +170,10 @@
 
       let auto = true;
       const NOTE = [
-        'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği. Gezen dalgada üçü de aynı salınımı yapar, her biri komşusundan biraz geç.',
-        'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve iki <span class="fr">sarı komşusunun</span> yüksekliği.'
+        'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve <span class="fr">sarı</span> ile <span class="bl">mavi</span> komşularının yüksekliği. Gezen dalgada üçü de aynı salınımı yapar, her biri komşusundan biraz geç.',
+        'Alttaki çizgiler son dört saniyede <span class="you">kırmızı kuşun</span> ve <span class="fr">sarı</span> ile <span class="bl">mavi</span> komşularının yüksekliği.'
       ];
-      const label = () => { $('bc').classList.toggle('dim', !S.target); $('bD').setAttribute('aria-pressed', S.neu ? 'false' : 'true'); $('bN').setAttribute('aria-pressed', S.neu ? 'true' : 'false'); $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
+      const label = () => { $('strName').textContent = S.neu ? 'Neumann' : 'Dirichlet'; $('bc').classList.toggle('dim', !S.target); $('bD').setAttribute('aria-pressed', S.neu ? 'false' : 'true'); $('bN').setAttribute('aria-pressed', S.neu ? 'true' : 'false'); $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
       const setMode = v => { S.target = v; sinceSwitch = 0; label(); if (reduced) { S.m = v; requestAnimationFrame(frame); } };
       const toggle = () => setMode(S.target ? 0 : 1);
       $('stages').addEventListener('click', () => { auto = false; toggle(); });
