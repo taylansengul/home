@@ -14,29 +14,33 @@
   <style>
     :root { --kus-friend: #c08a2b; --kus-blue: #3b6ea5; --kus-green: #4f8a4b; --kus-purple: #7d5ba6; }
     @media (prefers-color-scheme: dark) { :root { --kus-friend: #e0b25a; --kus-blue: #7eaad9; --kus-green: #8cc58a; --kus-purple: #b59ae0; } }
-    .stages { margin: 1.5rem 0; }
+    .page-header { margin-bottom: 1.2rem; padding-bottom: 1rem; }
+    .stages { margin: 0.6rem 0 1.5rem; }
     .stage[hidden] { display: none; }
     .stage { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
     .stages canvas { display: block; width: 100%; }
     #ring, #str { cursor: pointer; touch-action: manipulation; }
-    #ring { aspect-ratio: 1.6 / 1; }
-    #str { aspect-ratio: 2.2 / 1; }
+    #ring { aspect-ratio: 2 / 1; }
+    #str { aspect-ratio: 3 / 1; }
     .trace { height: 120px; }
-    .mode { margin: 1.5rem 0 0; font-family: var(--mono); font-weight: var(--mono-weight); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-    .mode button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 0.2rem 0; cursor: pointer; }
-    .mode button[aria-pressed="true"] { color: var(--accent); text-decoration: underline; text-underline-offset: 0.3em; }
-    .mode button:hover { color: var(--ink); }
-    .mode { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; }
-    .mode .bc { margin-left: 1.6rem; transition: opacity 0.4s; }
-    .mode .bc button.dim { opacity: 0.35; transition: opacity 0.4s; }
-    .params { margin: 0.8rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.6rem; font-family: var(--mono); font-weight: var(--mono-weight); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-    .params label { display: inline-flex; align-items: center; gap: 0.6rem; }
-    .params input[type=range] { width: 7.5rem; accent-color: var(--accent); }
-    .params output { min-width: 2.2em; color: var(--ink); }
-    .params .omega { font-family: var(--serif); font-size: 1rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
-    .formula { margin: 0; text-align: center; font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
+    /* var(--x, yedek): styles.css yüklenmezse de çerçeve, renk ve font yerinde kalır */
+    .controls { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem 0.9rem; margin: 0; font-family: var(--mono, "IBM Plex Mono", monospace); font-weight: var(--mono-weight, 300); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted, #66615c); }
+    @media (max-width: 640px) { .controls { grid-template-columns: 1fr; } }
+    .box { margin: 0; min-width: 0; border: 1px solid var(--rule, #d8d0c4); padding: 0.3rem 0.9rem 0.55rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.6rem; }
+    .box legend { padding: 0 0.35rem; margin-left: -0.35rem; font-size: 0.65rem; }
+    .box button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 0.2rem 0; cursor: pointer; }
+    .box button[aria-pressed="true"] { color: var(--accent, #8b3a1e); text-decoration: underline; text-underline-offset: 0.3em; }
+    .box button:hover { color: var(--ink, #1a1a1a); }
+    .bc button.dim { opacity: 0.35; transition: opacity 0.4s; }
+    .params { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 0.4rem 1.8rem; }
+    @media (max-width: 640px) { .params { grid-template-columns: 1fr; } }
+    .params label { display: grid; grid-template-columns: 3.4em minmax(4rem, 1fr) 2.6em; align-items: center; gap: 0.6rem; }
+    .params input[type=range] { width: 100%; margin: 0; accent-color: var(--accent, #8b3a1e); }
+    .params output { text-align: right; color: var(--ink, #1a1a1a); }
+    .params .omega { justify-self: end; font-family: var(--serif, "EB Garamond", Georgia, serif); font-size: 1rem; letter-spacing: 0; text-transform: none; color: var(--ink, #1a1a1a); white-space: nowrap; }
+    .formula { margin: 0; text-align: center; font-family: var(--serif, "EB Garamond", Georgia, serif); font-size: 1.05rem; color: var(--ink, #1a1a1a); }
     .formula i, .params .omega i { font-style: italic; }
-    .trace-note { margin: 0 0 1.5rem; font-size: 0.98rem; color: var(--muted); max-width: 46rem; }
+    .trace-note { margin: 0.8rem 0 0; font-size: 0.98rem; color: var(--muted, #66615c); max-width: 46rem; }
   </style>
 </head>
 <body id="top">
@@ -53,13 +57,13 @@
       <p class="eyebrow"><time datetime="2026-11-13">13 Kasım 2026</time> · Animasyon</p>
       <h1>Teldeki Kuşlar</h1>
     </header>
-    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><span class="bc" id="bc" role="group" aria-label="Tel ve uç koşulu"><button type="button" id="bP" aria-pressed="false">Periyodik</button> · <button type="button" id="bS" aria-pressed="false">Sonsuz</button> · <button type="button" id="bD" lang="en" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" lang="en" aria-pressed="false">Neumann</button></span></p>
-    <p class="params" role="group" aria-label="Parametreler"><label><i style="text-transform:none">n</i> <input type="range" id="pn" min="1" max="6" step="1" value="3"><output id="on">3</output></label><label>Hız <i style="text-transform:none">c</i> <input type="range" id="pc" min="0.2" max="2" step="0.05" value="1"><output id="oc">1.00</output></label><label>Kuş <input type="range" id="pN" min="4" max="40" step="1" value="20"><output id="oN">20</output></label><span class="omega" id="omega"></span></p>
+    <div class="controls"><fieldset class="box"><legend>Dalga türü</legend><button type="button" id="mGezen" aria-pressed="false">Gezen <span lang="en">(traveling)</span></button> · <button type="button" id="mDuran" aria-pressed="true">Duran <span lang="en">(standing)</span></button></fieldset><fieldset class="box bc" id="bc"><legend>Sınır koşulu</legend><button type="button" id="bP" aria-pressed="false">Periyodik</button> · <button type="button" id="bS" aria-pressed="false">Sonsuz</button> · <button type="button" id="bD" lang="en" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" lang="en" aria-pressed="false">Neumann</button></fieldset>
+      <fieldset class="box params"><legend>Parametreler</legend><label><span><i style="text-transform:none">n</i></span><input type="range" id="pn" min="1" max="6" step="1" value="3"><output id="on">3</output></label><label><span>Hız <i style="text-transform:none">c</i></span><input type="range" id="pc" min="0.2" max="2" step="0.05" value="1"><output id="oc">1.00</output></label><label><span>Kuş</span><input type="range" id="pN" min="4" max="40" step="1" value="20"><output id="oN">20</output></label><span class="omega" id="omega"></span></fieldset></div>
+    <p class="trace-note" id="note"></p>
     <div class="stages" id="stages" role="img" aria-label="Halka tel ya da gitar teli üzerinde kuşlar; dalga gezen ya da duran. Bir kuşa tıklayınca seçilir ya da bırakılır.">
       <div class="stage" id="stRing" hidden><canvas id="ring"></canvas><p class="formula" id="fRing"></p><canvas id="ringTrace" class="trace"></canvas></div>
       <div class="stage" id="stStr"><canvas id="str"></canvas><p class="formula" id="fStr"></p><canvas id="strTrace" class="trace"></canvas></div>
     </div>
-    <p class="trace-note" id="note"></p>
     <script>
     (() => {
       const $ = id => document.getElementById(id);
@@ -122,7 +126,7 @@
       function drawRing(t) {
         const { ctx, w, h } = fit($('ring'));
         ctx.clearRect(0, 0, w, h);
-        const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.33, A = R * 0.16;
+        const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.36, A = R * 0.16;
         const P = th => { const r = R + A * wave(S.n * th, t); return [cx + r * Math.cos(th), cy + r * Math.sin(th)]; };
         ctx.setLineDash([3, 5]); ctx.strokeStyle = C.line; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.stroke(); ctx.setLineDash([]);
@@ -145,7 +149,7 @@
         const { ctx, w, h } = fit($('str'));
         ctx.clearRect(0, 0, w, h);
         const pinned = isPinned(); // D/N yalnız duran dalgayla seçilir, m = 1
-        const x0 = w * 0.07, x1 = w * 0.93, L = x1 - x0, cy = h * 0.55, A = h * 0.22;
+        const x0 = w * 0.07, x1 = w * 0.93, L = x1 - x0, cy = h * 0.56, A = h * 0.3;
         const k = S.n * Math.PI / L;
         const ph = isNeu() ? Math.PI / 2 : 0;
         const Y = x => cy - A * wave(k * (x - x0) + ph, t);
@@ -202,8 +206,8 @@
       }
 
       const NOTE = [
-        'Alttaki çizgiler son dört saniyede renkli kuşların yüksekliği. Bir kuşa tıklayınca seçilir ya da bırakılır. Gezen dalgada hepsi aynı salınımı yapar, her biri komşusundan biraz geç.',
-        'Alttaki çizgiler son dört saniyede renkli kuşların yüksekliği. Bir kuşa tıklayınca seçilir ya da bırakılır.'
+        'Gezen dalga yalnız periyodik telde ve sonsuz telde olur. Uçları bağlı telde (Dirichlet, Neumann) dalga uçtan yansır, geriye duran dalga kalır. Alttaki çizgiler son dört saniyede renkli kuşların yüksekliği. Bir kuşa tıklayınca seçilir ya da bırakılır. Gezen dalgada hepsi aynı salınımı yapar, her biri komşusundan biraz geç.',
+        'Gezen dalga yalnız periyodik telde ve sonsuz telde olur. Uçları bağlı telde (Dirichlet, Neumann) dalga uçtan yansır, geriye duran dalga kalır. Alttaki çizgiler son dört saniyede renkli kuşların yüksekliği. Bir kuşa tıklayınca seçilir ya da bırakılır.'
       ];
       const nn = () => S.n === 1 ? '' : S.n;
       const formulas = () => {
