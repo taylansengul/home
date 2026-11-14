@@ -53,7 +53,7 @@
       <p class="eyebrow"><time datetime="2026-11-13">13 Kasım 2026</time> · Animasyon</p>
       <h1>Teldeki Kuşlar</h1>
     </header>
-    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><span class="bc" id="bc" role="group" aria-label="Tel ve uç koşulu"><button type="button" id="bP" aria-pressed="false">Periyodik</button> · <button type="button" id="bD" lang="en" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" lang="en" aria-pressed="false">Neumann</button></span></p>
+    <p class="mode" role="group" aria-label="Dalga türü"><button type="button" id="mGezen" aria-pressed="false">Gezen dalga</button> · <button type="button" id="mDuran" aria-pressed="true">Duran dalga</button><span class="bc" id="bc" role="group" aria-label="Tel ve uç koşulu"><button type="button" id="bP" aria-pressed="false">Periyodik</button> · <button type="button" id="bS" aria-pressed="false">Sonsuz</button> · <button type="button" id="bD" lang="en" aria-pressed="true">Dirichlet</button> · <button type="button" id="bN" lang="en" aria-pressed="false">Neumann</button></span></p>
     <p class="params" role="group" aria-label="Parametreler"><label><i style="text-transform:none">n</i> <input type="range" id="pn" min="1" max="6" step="1" value="3"><output id="on">3</output></label><label>Hız <i style="text-transform:none">c</i> <input type="range" id="pc" min="0.2" max="2" step="0.05" value="1"><output id="oc">1.00</output></label><label>Kuş <input type="range" id="pN" min="4" max="40" step="1" value="20"><output id="oN">20</output></label><span class="omega" id="omega"></span></p>
     <div class="stages" id="stages" role="img" aria-label="Halka tel ya da gitar teli üzerinde kuşlar; dalga gezen ya da duran. Bir kuşa tıklayınca seçilir ya da bırakılır.">
       <div class="stage" id="stRing" hidden><canvas id="ring"></canvas><p class="formula" id="fRing"></p><canvas id="ringTrace" class="trace"></canvas></div>
@@ -77,7 +77,8 @@
       // Halka: θ ∈ [0, 2π), tel: x ∈ [0, π]. Böylece k = n ve ω = nc ikisinde de aynı (c: dalga hızı).
       // t: dalganın fazı ωt, her karede ω·dt kadar ilerler (kaydırıcı oynayınca sıçramaz).
       // sel: seçili kuşlar, [sıra, renk yuvası] çiftleri; en çok PAL tane, renk kuşla birlikte kalır
-      const S = { m: 1, target: 1, n: 3, c: 1, N: 20, t: 0, neu: 0, ring: 0 }; // ring: 1 halka (periyodik) gösterilir
+      const S = { m: 1, target: 1, n: 3, c: 1, N: 20, t: 0, bc: 'D' }; // bc: P halka, S sonsuz tel, D/N uçları bağlı tel
+      const isNeu = () => S.bc === 'N', isRing = () => S.bc === 'P', isPinned = () => S.bc === 'D' || S.bc === 'N';
       const PAL = 5;
       const sel = { ring: [[19, 1], [0, 0], [1, 2]], str: [[5, 1], [6, 0], [7, 2]] };
       const slotOf = (w, i) => { const e = sel[w].find(p => p[0] === i); return e ? e[1] : -1; };
@@ -143,10 +144,10 @@
       function drawStr(t) {
         const { ctx, w, h } = fit($('str'));
         ctx.clearRect(0, 0, w, h);
-        const pinned = S.m >= 0.995;
+        const pinned = isPinned(); // D/N yalnız duran dalgayla seçilir, m = 1
         const x0 = w * 0.07, x1 = w * 0.93, L = x1 - x0, cy = h * 0.55, A = h * 0.22;
         const k = S.n * Math.PI / L;
-        const ph = S.neu ? Math.PI / 2 : 0;
+        const ph = isNeu() ? Math.PI / 2 : 0;
         const Y = x => cy - A * wave(k * (x - x0) + ph, t);
         ctx.setLineDash([3, 5]); ctx.strokeStyle = C.line; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(pinned ? x0 : 0, cy); ctx.lineTo(pinned ? x1 : w, cy); ctx.stroke(); ctx.setLineDash([]);
@@ -155,7 +156,7 @@
           ctx.strokeStyle = C.wire; ctx.beginPath();
           for (let i = 0; i <= 300; i++) { const x = x0 + L * i / 300; i ? ctx.lineTo(x, Y(x)) : ctx.moveTo(x, Y(x)); }
           ctx.stroke();
-          if (S.neu) {
+          if (isNeu()) {
             ctx.lineWidth = 1.5; [x0, x1].forEach(x => { ctx.beginPath(); ctx.moveTo(x, cy - A * 1.35); ctx.lineTo(x, cy + A * 1.35); ctx.stroke(); });
             ctx.lineWidth = 2; ctx.fillStyle = C.eye; [x0, x1].forEach(x => { ctx.beginPath(); ctx.arc(x, Y(x), 5, 0, 7); ctx.fill(); ctx.stroke(); });
           } else { ctx.fillStyle = C.wire; [x0, x1].forEach(x => ctx.fillRect(x - 4, cy - 14, 8, 28)); }
@@ -206,12 +207,13 @@
       ];
       const nn = () => S.n === 1 ? '' : S.n;
       const formulas = () => {
-        const n = nn(), f = S.neu ? 'cos' : 'sin';
+        const n = nn(), f = isNeu() ? 'cos' : 'sin';
+        const dom = S.bc === 'S' ? ', <i>x</i> ∈ ℝ' : ', 0 ≤ <i>x</i> ≤ π';
         $('fRing').innerHTML = S.target ? `<i>u</i> = sin ${n}<i>θ</i> · cos <i>ωt</i>` : `<i>u</i> = sin(${n}<i>θ</i> − <i>ωt</i>)`;
-        $('fStr').innerHTML = S.target ? `<i>u</i> = ${f} ${n}<i>x</i> · cos <i>ωt</i>` : `<i>u</i> = ${f}(${n}<i>x</i> − <i>ωt</i>)`;
+        $('fStr').innerHTML = (S.target ? `<i>u</i> = ${f} ${n}<i>x</i> · cos <i>ωt</i>` : `<i>u</i> = ${f}(${n}<i>x</i> − <i>ωt</i>)`) + dom;
         $('omega').innerHTML = `<i>ω</i> = <i>nc</i> = ${omega().toFixed(2)}`;
       };
-      const label = () => { formulas(); $('stRing').hidden = !S.ring; $('stStr').hidden = !!S.ring; ['bD', 'bN'].forEach(b => $(b).classList.toggle('dim', !S.target)); $('bP').setAttribute('aria-pressed', S.ring ? 'true' : 'false'); $('bD').setAttribute('aria-pressed', !S.ring && !S.neu ? 'true' : 'false'); $('bN').setAttribute('aria-pressed', !S.ring && S.neu ? 'true' : 'false'); $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
+      const label = () => { formulas(); $('stRing').hidden = !isRing(); $('stStr').hidden = isRing(); ['bD', 'bN'].forEach(b => $(b).classList.toggle('dim', !S.target)); [['bP', 'P'], ['bS', 'S'], ['bD', 'D'], ['bN', 'N']].forEach(([b, v]) => $(b).setAttribute('aria-pressed', S.bc === v ? 'true' : 'false')); $('note').innerHTML = NOTE[S.target]; $('mGezen').setAttribute('aria-pressed', S.target ? 'false' : 'true'); $('mDuran').setAttribute('aria-pressed', S.target ? 'true' : 'false'); };
       const setMode = v => { S.target = v; label(); if (reduced) { S.m = v; requestAnimationFrame(frame); } };
       // Kuşlar hızlı oynar, tıklama yüksekliğe bakmaz: halkada en yakın açı, telde en yakın sütun seçilir.
       const hit = (w, x, y) => {
@@ -228,13 +230,16 @@
         const i = hit(w, e.offsetX, e.offsetY);
         if (i >= 0) { toggleBird(w, i); if (reduced) requestAnimationFrame(frame); }
       }));
-      $('mGezen').addEventListener('click', () => setMode(0));
+      // uçları bağlı telde gezen dalga olmaz: Dirichlet ya da Neumann'dayken Gezen sonsuz tele geçer
+      $('mGezen').addEventListener('click', () => { if (isPinned()) S.bc = 'S'; setMode(0); });
       $('mDuran').addEventListener('click', () => setMode(1));
-      // gezen dalga uçları bağlı telde olmaz: Dirichlet ya da Neumann seçilince duran dalgaya geçilir
-      const setBC = v => { S.ring = v < 0 ? 1 : 0; if (v >= 0) S.neu = v; label(); if (reduced) requestAnimationFrame(frame); };
-      $('bP').addEventListener('click', () => setBC(-1));
-      $('bD').addEventListener('click', () => { setBC(0); if (!S.target) setMode(1); });
-      $('bN').addEventListener('click', () => { setBC(1); if (!S.target) setMode(1); });
+      // Dirichlet ya da Neumann seçilince hemen duran dalgaya geçilir (geçiş anında uçlar oynamasın diye m = 1)
+      const setBC = v => {
+        S.bc = v;
+        if (isPinned()) { S.m = 1; if (!S.target) setMode(1); }
+        label(); if (reduced) requestAnimationFrame(frame);
+      };
+      [['bP', 'P'], ['bS', 'S'], ['bD', 'D'], ['bN', 'N']].forEach(([b, v]) => $(b).addEventListener('click', () => setBC(v)));
       const param = (id, out, key, fmt) => $(id).addEventListener('input', e => {
         S[key] = +e.target.value; $(out).textContent = fmt(S[key]); formulas();
         if (reduced) requestAnimationFrame(frame);
